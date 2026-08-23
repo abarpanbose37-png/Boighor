@@ -504,9 +504,82 @@
     *{animation:none !important; transition:none !important;}
     html{scroll-behavior:auto;}
   }
+
+  /* ============ AUTH / CLOUD ============ */
+  #authbar{
+    position:fixed; top:0; left:0; right:0; z-index:60;
+    display:flex; align-items:center; gap:0.8rem;
+    padding:0.55rem 6vw;
+    background:rgba(252,250,250,0.9);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line-soft);
+    font-family:'Jost',sans-serif; font-size:0.72rem;
+    letter-spacing:0.08em;
+  }
+  #authbar .status{ color:var(--ink-soft); flex:1; }
+  #authbar .status b{ color:var(--plum); font-weight:500; }
+  #authbar button{
+    font-family:'Jost',sans-serif; font-size:0.68rem; letter-spacing:0.14em;
+    text-transform:uppercase; cursor:pointer;
+    padding:0.42rem 0.9rem; border-radius:999px;
+    border:1px solid var(--line); background:transparent; color:var(--ink-2);
+    transition:background .18s, color .18s;
+  }
+  #authbar button:hover{ background:var(--plum); color:#fff; border-color:var(--plum); }
+  #authbar .dot{ width:7px; height:7px; border-radius:50%; background:var(--ochre); }
+  body.signed-in #authbar .dot{ background:var(--sage); }
+  body{ padding-top:2.7rem; }
+
+  /* editing controls hidden for visitors */
+  body:not(.signed-in) .edit-btn,
+  body:not(.signed-in) .lend-btn,
+  body:not(.signed-in) .s-actions{ display:none !important; }
+
+  #loginbox{
+    position:fixed; inset:0; z-index:70; display:none;
+    align-items:center; justify-content:center;
+    background:rgba(43,33,41,0.42); backdrop-filter:blur(4px);
+  }
+  #loginbox.open{ display:flex; }
+  #loginbox .panel{
+    background:var(--card); border-radius:18px; padding:2rem 1.8rem;
+    width:min(370px,90vw); box-shadow:0 30px 70px rgba(43,33,41,0.28);
+  }
+  #loginbox h3{ margin:0 0 1.2rem; font-family:'Tiro Bangla',serif; font-weight:400; font-size:1.5rem; }
+  #loginbox input{
+    width:100%; margin-bottom:0.7rem; padding:0.68rem 0.8rem;
+    border:1px solid var(--line); border-radius:9px; background:var(--paper-2);
+    font-family:'Jost',sans-serif; font-size:0.9rem; color:var(--ink);
+  }
+  #loginbox .row{ display:flex; gap:0.6rem; margin-top:0.6rem; }
+  #loginbox button{
+    flex:1; padding:0.62rem; border-radius:999px; cursor:pointer;
+    font-family:'Jost',sans-serif; font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase;
+    border:1px solid var(--line); background:transparent; color:var(--ink-2);
+  }
+  #loginbox button.primary{ background:var(--plum); color:#fff; border-color:var(--plum); }
+  #login-err{ color:#B4495F; font-size:0.75rem; min-height:1.1em; font-family:'Jost',sans-serif; }
 </style>
 </head>
 <body>
+
+<div id="authbar">
+  <span class="dot"></span>
+  <span class="status" id="auth-status">read-only · viewing</span>
+  <button id="auth-btn">Sign in</button>
+</div>
+<div id="loginbox">
+  <div class="panel">
+    <h3>আমার বইঘর</h3>
+    <input id="li-email" type="email" placeholder="email" autocomplete="username">
+    <input id="li-pass" type="password" placeholder="password" autocomplete="current-password">
+    <div id="login-err"></div>
+    <div class="row">
+      <button id="li-cancel">Cancel</button>
+      <button id="li-go" class="primary">Sign in</button>
+    </div>
+  </div>
+</div>
 <div class="wrap">
 
 <header>
@@ -566,6 +639,7 @@
 </footer>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const books = [
   {titleBn:"ব্যোমকেশ সমগ্র", titleEn:"Byomkesh Samagra", authorBn:"শরদিন্দু বন্দ্যোপাধ্যায়", authorEn:"Sharadindu Bandyopadhyay", publisher:"Ananda Publishers", category:"Detective", accent:"#3b3530", blurb:"The complete Byomkesh Bakshi stories. Sharadindu's 'satyanweshi' (truth-seeker) — never a detective, he insists — solves crimes in colonial and post-independence Bengal through pure deduction."},
@@ -924,7 +998,7 @@ function cardEdit(b){
         <button class="save-btn">Save</button>
         <button class="cancel-btn">Cancel</button>
       </div>
-      <p class="edit-note">Type a Bengali name in Latin letters — "shirshendu" — and it converts when you hit space or leave the field. Changes stay in this browser only.</p>
+      <p class="edit-note">Type a Bengali name in Latin letters — "shirshendu" — and it converts when you hit space or leave the field. Changes sync to the cloud and are visible to everyone.</p>
     </div>`;
 }
 
@@ -1032,23 +1106,110 @@ function toggleLend(i){
   renderCard(i); stats(); applyFilters();
 }
 
-function saveLending(){
-  try{
-    const out = {};
-    books.forEach((b,i) => { if(b.lentTo) out[i] = {to:b.lentTo, on:b.lentOn||''}; });
-    localStorage.setItem('boighor-lending', JSON.stringify(out));
-  }catch(e){}
+const SUPA_URL = 'https://sbopbrvjugdzyulnloil.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNib3BicnZqdWdkenl1bG5sb2lsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0ODc2NTcsImV4cCI6MjEwMzA2MzY1N30.U_gcaAFCZQGrftRD4Wfe1_2qBaiXPbDxN9PJ0FaplPA';
+const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+
+const statusEl = () => document.getElementById('auth-status');
+let signedIn = false;
+
+function flash(msg){
+  const el = statusEl(); if(!el) return;
+  const prev = el.innerHTML;
+  el.innerHTML = msg;
+  setTimeout(() => { el.innerHTML = prev; }, 2200);
 }
-function loadLending(){
+
+/* fields we persist — everything editable */
+const FIELDS = ['titleBn','titleEn','authorBn','authorEn','publisher','blurb','category','lentTo','lentOn'];
+
+function serialise(){
+  return books.map(b => {
+    const o = {};
+    FIELDS.forEach(f => { if(b[f]) o[f] = b[f]; });
+    return o;
+  });
+}
+
+async function saveLending(){
+  if(!signedIn){ flash('<b>not signed in</b> — change not saved'); return; }
   try{
-    const raw = localStorage.getItem('boighor-lending');
-    if(!raw) return;
-    const data = JSON.parse(raw);
-    Object.keys(data).forEach(k => {
-      const i = Number(k);
-      if(books[i]){ books[i].lentTo = data[k].to; books[i].lentOn = data[k].on; }
+    const { error } = await sb.from('shelf')
+      .upsert({ id: 1, data: serialise(), updated_at: new Date().toISOString() });
+    if(error) throw error;
+    flash('<b>saved</b> to cloud');
+  }catch(e){
+    console.error(e);
+    flash('<b>save failed</b> — ' + (e.message || 'try again'));
+  }
+}
+
+async function loadLending(){
+  try{
+    const { data, error } = await sb.from('shelf').select('data').eq('id', 1).maybeSingle();
+    if(error) throw error;
+    if(!data || !Array.isArray(data.data)) return false;
+    data.data.forEach((row, i) => {
+      if(!books[i]) return;
+      FIELDS.forEach(f => { books[i][f] = row[f] || ''; });
     });
-  }catch(e){}
+    return true;
+  }catch(e){
+    console.error('load failed', e);
+    return false;
+  }
+}
+
+/* ---------- auth ---------- */
+function setSignedIn(on, email){
+  signedIn = on;
+  document.body.classList.toggle('signed-in', on);
+  statusEl().innerHTML = on ? ('signed in · <b>' + (email || 'owner') + '</b>') : 'read-only · viewing';
+  document.getElementById('auth-btn').textContent = on ? 'Sign out' : 'Sign in';
+}
+
+const loginbox = () => document.getElementById('loginbox');
+
+async function initAuth(){
+  const { data } = await sb.auth.getSession();
+  setSignedIn(!!data.session, data.session?.user?.email);
+
+  document.getElementById('auth-btn').addEventListener('click', async () => {
+    if(signedIn){
+      await sb.auth.signOut();
+      setSignedIn(false);
+      redrawAll();
+    } else {
+      document.getElementById('login-err').textContent = '';
+      loginbox().classList.add('open');
+      document.getElementById('li-email').focus();
+    }
+  });
+
+  document.getElementById('li-cancel').addEventListener('click', () => loginbox().classList.remove('open'));
+  loginbox().addEventListener('click', e => { if(e.target === loginbox()) loginbox().classList.remove('open'); });
+
+  document.getElementById('li-go').addEventListener('click', doLogin);
+  document.getElementById('li-pass').addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
+}
+
+async function doLogin(){
+  const email = document.getElementById('li-email').value.trim();
+  const pass  = document.getElementById('li-pass').value;
+  const err   = document.getElementById('login-err');
+  err.textContent = 'checking…';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+  if(error){ err.textContent = error.message; return; }
+  err.textContent = '';
+  document.getElementById('li-pass').value = '';
+  loginbox().classList.remove('open');
+  setSignedIn(true, data.user?.email);
+  redrawAll();
+}
+
+function redrawAll(){
+  books.forEach((b,i) => renderCard(i));
+  renderRail(); stats(); applyFilters();
 }
 
 /* ---------- filters ---------- */
@@ -1090,10 +1251,15 @@ function stats(){
 }
 
 /* ---------- init ---------- */
-loadLending();
 renderRail();
 books.forEach((b,i) => renderCard(i));
 stats();
+
+(async () => {
+  await initAuth();
+  const ok = await loadLending();
+  if(ok) redrawAll();
+})();
 </script>
 </body>
 </html>
