@@ -1140,7 +1140,7 @@ async function saveLending(){
     flash('<b>saved</b> to cloud');
   }catch(e){
     console.error(e);
-    flash('<b>save failed</b> — ' + (e.message || 'try again'));
+    flash('<b>save failed</b> — ' + (e.message || e.hint || e.details || JSON.stringify(e)));
   }
 }
 
@@ -1155,7 +1155,13 @@ async function loadLending(){
     });
     return true;
   }catch(e){
+    const msg = e.message || e.hint || e.details || JSON.stringify(e);
     console.error('load failed', e);
+    if(/relation .* does not exist|Could not find the table|schema cache/i.test(msg)){
+      flash('<b>table missing</b> — run the SQL in Supabase');
+    } else {
+      flash('<b>load failed</b> — ' + msg);
+    }
     return false;
   }
 }
