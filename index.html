@@ -619,6 +619,84 @@
   .add-actions button:disabled{ opacity:0.5; cursor:not-allowed; }
   #add-err{ color:#B4495F; font-size:0.76rem; min-height:1.1em;
             font-family:'Jost',sans-serif; margin-top:0.7rem; }
+
+  /* ============ CONTROLS ROW ============ */
+  .controls{
+    max-width:1500px; margin:0 auto; padding:0 6vw;
+    display:flex; flex-wrap:wrap; align-items:center; gap:0.55rem;
+  }
+  .controls .lbl{
+    font-family:'Jost',sans-serif; font-size:0.58rem; letter-spacing:0.18em;
+    text-transform:uppercase; color:var(--ink-soft); margin-right:0.1rem;
+  }
+  .controls select{
+    font-family:'Jost',sans-serif; font-size:0.7rem; letter-spacing:0.06em;
+    padding:0.42rem 0.7rem; border-radius:999px;
+    border:1px solid var(--line); background:var(--card); color:var(--ink-2);
+    cursor:pointer;
+  }
+  .controls .toggle{
+    font-family:'Jost',sans-serif; font-size:0.64rem; letter-spacing:0.14em;
+    text-transform:uppercase; padding:0.44rem 0.85rem; border-radius:999px;
+    border:1px solid var(--line); background:transparent; color:var(--ink-soft);
+    cursor:pointer; transition:background .18s,color .18s,border-color .18s;
+  }
+  .controls .toggle:hover{ border-color:var(--rose); color:var(--plum); }
+  .controls .toggle.on{ background:var(--plum); color:#fff; border-color:var(--plum); }
+  .controls .spacer{ flex:1; }
+
+  /* ============ READING STATUS ============ */
+  .status-pip{
+    display:inline-flex; align-items:center; gap:0.34rem;
+    font-family:'Jost',sans-serif; font-size:0.56rem; letter-spacing:0.16em;
+    text-transform:uppercase; color:var(--ink-soft);
+  }
+  .status-pip::before{
+    content:''; width:7px; height:7px; border-radius:50%;
+    background:var(--line); box-shadow:inset 0 0 0 1px rgba(43,33,41,0.14);
+  }
+  .status-pip.read::before{ background:var(--sage); }
+  .status-pip.reading::before{ background:var(--ochre); }
+  .status-pip.unread::before{ background:transparent; }
+  .card.st-read{ box-shadow:inset 3px 0 0 var(--sage); }
+  .card.st-reading{ box-shadow:inset 3px 0 0 var(--ochre); }
+
+  /* ============ SERIES GROUPING ============ */
+  .series-tag{
+    display:none; margin-top:0.7rem;
+    font-family:'Jost',sans-serif; font-size:0.6rem; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--plum);
+    background:rgba(124,90,118,0.09); border:1px solid rgba(124,90,118,0.2);
+    border-radius:999px; padding:0.36rem 0.8rem; cursor:pointer;
+    transition:background .18s;
+  }
+  .series-tag:hover{ background:rgba(124,90,118,0.18); }
+  body.grouped .card.is-rep .series-tag.has-more{ display:inline-block; }
+  .card.in-series{ border-left:2px solid rgba(124,90,118,0.28); }
+
+  /* ============ DELETE ============ */
+  .danger-row{
+    display:flex; justify-content:flex-end; margin-top:0.9rem;
+    padding-top:0.85rem; border-top:1px solid var(--line-soft);
+  }
+  .del-btn{
+    font-family:'Jost',sans-serif; font-size:0.6rem; letter-spacing:0.16em;
+    text-transform:uppercase; cursor:pointer;
+    background:transparent; border:1px solid rgba(180,73,95,0.32);
+    color:#B4495F; border-radius:999px; padding:0.4rem 0.9rem;
+    transition:background .18s,color .18s;
+  }
+  .del-btn:hover{ background:#B4495F; color:#fff; border-color:#B4495F; }
+  .del-btn.confirm{ background:#B4495F; color:#fff; border-color:#B4495F; }
+
+  /* duplicate warning in the add box */
+  #dup-warn{
+    display:none; margin-top:0.9rem; padding:0.75rem 0.9rem;
+    border-radius:11px; background:rgba(194,154,91,0.14);
+    border:1px solid rgba(194,154,91,0.4);
+    font-family:'Hind Siliguri',sans-serif; font-size:0.82rem; color:var(--ink-2);
+  }
+  #dup-warn b{ color:var(--ink); }
 </style>
 </head>
 <body>
@@ -662,9 +740,12 @@
     <textarea id="a-blurb" placeholder="a line or two about the book"></textarea>
     <label>Shelf</label>
     <select id="a-category"></select>
+    <label>পড়া · Reading status</label>
+    <select id="a-status"></select>
     <label>ধার নিয়েছেন · Lent to <span class="translit-hint">blank = on the shelf</span></label>
     <input id="a-lent" placeholder="borrower's name">
 
+    <div id="dup-warn"></div>
     <div id="add-err"></div>
     <div class="add-actions">
       <button id="add-cancel">Cancel</button>
@@ -712,6 +793,24 @@
   <button class="pill" data-filter="Sci-Fi">কল্পবিজ্ঞান · Sci-Fi</button>
   <button class="pill" data-filter="__lent">ধার · Lent out</button>
   <button class="pill" data-filter="Anthology">সংকলন · Anthology</button>
+</div>
+<div class="controls">
+  <span class="lbl">Sort</span>
+  <select id="sort-by">
+    <option value="shelf">Shelf order</option>
+    <option value="titleEn">Title A–Z</option>
+    <option value="authorEn">Author A–Z</option>
+    <option value="category">Shelf / category</option>
+    <option value="recent">Recently added</option>
+  </select>
+  <span class="lbl">Reading</span>
+  <select id="status-filter">
+    <option value="all">Any</option>
+    <option value="unread">Unread</option>
+    <option value="reading">Reading</option>
+    <option value="read">Read</option>
+  </select>
+  <button class="toggle" id="group-toggle">Group series</button>
 </div>
 <p class="toolbar-note">Bengali fields accept phonetic typing — write <span class="mono">sharadindu</span> and it becomes শরদিন্দু as you go.</p>
 
@@ -939,6 +1038,37 @@ const books = [
   {titleBn:"গোপাল ভাঁড় রহস্য", titleEn:"Gopal Bhanr Rahasya", authorBn:"—", authorEn:"(Book Farm)", publisher:"Book Farm", category:"Literature", accent:"", blurb:"A Book Farm volume investigating the Gopal Bhar legend."},
 ];
 const CATEGORIES = ["Detective","Sci-Fi","Children's","Anthology","Thriller","Literature"];
+const STATUSES = [['','Not set'],['unread','Unread'],['reading','Reading'],['read','Read']];
+
+/* ---------- series detection ----------
+   Strips volume markers so "Feluda Samagra, Vol. 2" and "Feluda Samagra 1"
+   collapse to the same key. Bengali numerals handled too. */
+const BN_DIGITS = /[০-৯]/g;
+function seriesKey(b){
+  let t = (b.titleEn || b.titleBn || '').toLowerCase();
+  t = t.replace(BN_DIGITS, '');
+  t = t.replace(/\(([^)]*)\)/g, ' ');                    // drop parentheticals
+  t = t.replace(/\b(vol|volume|part|khanda|prthom|dwitiyo)\b\.?/g, ' ');
+  t = t.replace(/[,–—:·\-]+/g, ' ');
+  t = t.replace(/\b\d+\b/g, ' ');                        // bare numbers
+  t = t.replace(/\b(i{1,3}|iv|v|vi{1,3}|ix|x)\b/g, ' ');  // roman numerals
+  t = t.replace(/[^a-z\s]/g, ' ').replace(/\s+/g, ' ').trim();
+  return t;
+}
+function seriesMap(){
+  const m = new Map();
+  books.forEach((b,i) => {
+    const k = seriesKey(b);
+    if(!k) return;
+    if(!m.has(k)) m.set(k, []);
+    m.get(k).push(i);
+  });
+  return m;
+}
+function statusLabel(v){
+  const f = STATUSES.find(x => x[0] === (v||''));
+  return f ? f[1] : 'Not set';
+}
 
 /* ---------- phonetic English → Bengali ---------- */
 const VOWELS = [
@@ -1046,7 +1176,7 @@ function renderRail(){
 function cardView(b,i){
   return `
     <div class="card-head">
-      <div class="cat">${esc(b.category)}</div>
+      <div class="cat">${esc(b.category)}${b.status ? ` <span class="status-pip ${esc(b.status)}">${esc(statusLabel(b.status))}</span>` : ''}</div>
       <button class="lend-btn${b.lentTo ? ' on' : ''}">${b.lentTo ? '↩ Returned' : '↗ Lend'}</button>
       <button class="edit-btn">✎ Edit</button>
     </div>
@@ -1060,7 +1190,8 @@ function cardView(b,i){
     <div class="meta">
       <span>${esc(b.publisher)}</span>
       <button class="detail-hint">Details →</button>
-    </div>`;
+    </div>
+    <button class="series-tag"></button>`;
 }
 
 function cardEdit(b){
@@ -1086,10 +1217,13 @@ function cardEdit(b){
       <input class="f-lent-on" type="date" value="${esc(b.lentOn||'')}">
       <label>Shelf</label>
       <select class="f-category">${opts}</select>
+      <label>পড়া · Reading status</label>
+      <select class="f-status">${STATUSES.map(([v,l]) => `<option value="${v}" ${v===(b.status||'')?'selected':''}>${l}</option>`).join('')}</select>
       <div class="edit-actions">
         <button class="save-btn">Save</button>
         <button class="cancel-btn">Cancel</button>
       </div>
+      <div class="danger-row"><button class="del-btn">Delete this book</button></div>
       <p class="edit-note">Type a Bengali name in Latin letters — "shirshendu" — and it converts when you hit space or leave the field. Changes sync to the cloud and are visible to everyone.</p>
     </div>`;
 }
@@ -1107,8 +1241,15 @@ function renderCard(i){
   card.dataset.category = b.category;
   card.dataset.lent = b.lentTo ? '1' : '0';
   card.dataset.search = (b.titleBn+' '+b.titleEn+' '+b.authorBn+' '+b.authorEn+' '+(b.blurb||'')+' '+b.publisher+' '+(b.lentTo||'')).toLowerCase();
+  card.dataset.status = b.status || '';
+  card.dataset.series = seriesKey(b);
+  card.dataset.idx = i;
   card.innerHTML = cardView(b,i);
   card.classList.toggle('is-lent', !!b.lentTo);
+  card.classList.remove('st-read','st-reading');
+  if(b.status === 'read')    card.classList.add('st-read');
+  if(b.status === 'reading') card.classList.add('st-reading');
+  card.querySelector('.series-tag').addEventListener('click', () => toggleSeries(card.dataset.series));
   card.querySelector('.edit-btn').addEventListener('click', () => enterEdit(i));
   card.querySelector('.lend-btn').addEventListener('click', () => toggleLend(i));
   card.querySelector('.title-btn').addEventListener('click', () => openDetail(i));
@@ -1122,6 +1263,39 @@ function enterEdit(i){
   attachPhonetic(card.querySelector('.f-author-bn'));
   card.querySelector('.save-btn').addEventListener('click', () => saveCard(i));
   card.querySelector('.cancel-btn').addEventListener('click', () => renderCard(i));
+
+  /* delete needs two clicks — the first one arms it */
+  const del = card.querySelector('.del-btn');
+  let armed = false;
+  del.addEventListener('click', () => {
+    if(!signedIn){ del.textContent = 'Sign in first'; return; }
+    if(!armed){
+      armed = true;
+      del.classList.add('confirm');
+      del.textContent = 'Tap again to delete';
+      setTimeout(() => {
+        if(!armed) return;
+        armed = false;
+        del.classList.remove('confirm');
+        del.textContent = 'Delete this book';
+      }, 4000);
+      return;
+    }
+    deleteBook(i);
+  });
+}
+
+async function deleteBook(i){
+  books.splice(i, 1);
+  rebuildGrid();
+  await saveLending();
+}
+
+/* cards are keyed by index, so a removal means rebuilding the whole grid */
+function rebuildGrid(){
+  gridEl.innerHTML = '';
+  books.forEach((b,idx) => renderCard(idx));
+  renderRail(); stats(); applySort(); applyFilters();
 }
 
 function saveCard(i){
@@ -1136,6 +1310,7 @@ function saveCard(i){
   b.lentOn = card.querySelector('.f-lent-on').value;
   if(!b.lentTo) b.lentOn = '';
   b.category  = card.querySelector('.f-category').value;
+  b.status    = card.querySelector('.f-status').value;
   saveLending();
   renderCard(i); renderRail(); stats(); applyFilters();
 }
@@ -1161,6 +1336,7 @@ function openDetail(i){
     <div class="s-title-en">${esc(b.titleEn)}</div>
     ${srow('লেখক · Author', `<span class="big-bn">${esc(b.authorBn)}</span><span class="small-en">${esc(b.authorEn)}</span>`)}
     ${srow('প্রকাশক · Publisher', esc(b.publisher))}
+    ${b.status ? srow('পড়া · Reading', esc(statusLabel(b.status))) : ''}
     ${b.lentTo ? srow('ধার · Lent to', `<span class="s-lent">${esc(b.lentTo)}</span>${b.lentOn ? ' — since ' + esc(b.lentOn) : ''}`) : ''}
     ${b.blurb ? srow('পরিচিতি · About', `<div class="s-about">${esc(b.blurb)}</div>`) : ''}
     <div class="s-actions"><button class="s-edit" id="s-edit">✎ Edit this book</button></div>`;
@@ -1195,7 +1371,7 @@ function toggleLend(i){
     b.lentOn = new Date().toISOString().slice(0,10);
   }
   saveLending();
-  renderCard(i); stats(); applyFilters();
+  renderCard(i); stats(); applySort(); applyFilters();
 }
 
 const SUPA_URL = 'https://sbopbrvjugdzyulnloil.supabase.co';
@@ -1218,7 +1394,7 @@ function flash(msg){
 }
 
 /* fields we persist — everything editable */
-const FIELDS = ['titleBn','titleEn','authorBn','authorEn','publisher','blurb','category','lentTo','lentOn'];
+const FIELDS = ['titleBn','titleEn','authorBn','authorEn','publisher','blurb','category','lentTo','lentOn','status','addedOn'];
 
 function serialise(){
   return books.map(b => {
@@ -1327,24 +1503,136 @@ async function doLogin(){
 }
 
 function redrawAll(){
+  gridEl.innerHTML = '';
   books.forEach((b,i) => renderCard(i));
-  renderRail(); stats(); applyFilters();
+  renderRail(); stats(); applySort(); applyFilters();
 }
 
 /* ---------- filters ---------- */
-let activeCat = 'all', term = '';
+let activeCat = 'all', term = '', sortBy = 'shelf', statusFilter = 'all';
+let grouped = false;
+const expandedSeries = new Set();
+
+/* ---------- sorting ----------
+   The grid is CSS grid, so we reorder with the `order` property and never
+   touch the DOM — card ids stay tied to their index in `books`. */
+function sortedOrder(){
+  const idx = books.map((_, i) => i);
+  const key = i => {
+    const b = books[i];
+    switch(sortBy){
+      case 'titleEn':  return (b.titleEn || b.titleBn || '').toLowerCase();
+      case 'authorEn': return (b.authorEn || b.authorBn || '~').toLowerCase();
+      case 'category': return (b.category || '~').toLowerCase() + '|' + (b.titleEn || '').toLowerCase();
+      default:         return null;
+    }
+  };
+
+  if(sortBy === 'recent'){
+    idx.sort((a, b) => b - a);              // newest additions sit at the end
+  } else if(sortBy !== 'shelf'){
+    idx.sort((a, b) => {
+      const ka = key(a), kb = key(b);
+      return ka < kb ? -1 : ka > kb ? 1 : a - b;
+    });
+  }
+
+  /* grouping only makes sense if series members sit next to each other */
+  if(grouped){
+    const seen = [];
+    const byKey = new Map();
+    idx.forEach(i => {
+      const k = seriesKey(books[i]) || ('__solo' + i);
+      if(!byKey.has(k)){ byKey.set(k, []); seen.push(k); }
+      byKey.get(k).push(i);
+    });
+    return seen.flatMap(k => byKey.get(k));
+  }
+  return idx;
+}
+
+function applySort(){
+  sortedOrder().forEach((bookIdx, rank) => {
+    const card = document.getElementById('card-' + bookIdx);
+    if(card) card.style.order = rank;
+  });
+}
+
+/* ---------- series grouping ---------- */
+function toggleSeries(key){
+  if(!key) return;
+  if(expandedSeries.has(key)) expandedSeries.delete(key);
+  else expandedSeries.add(key);
+  applyFilters();
+}
+
 function applyFilters(){
   let n = 0;
+  document.body.classList.toggle('grouped', grouped);
+
+  /* which cards pass the search / category / status filters */
+  const passes = new Map();
   document.querySelectorAll('.card').forEach(card => {
     const ok = (activeCat === 'all'
                  || (activeCat === '__lent' ? card.dataset.lent === '1'
                                             : card.dataset.category === activeCat))
-            && card.dataset.search.includes(term);
-    card.style.display = ok ? '' : 'none';
-    if(ok) n++;
+            && card.dataset.search.includes(term)
+            && (statusFilter === 'all'
+                 || (statusFilter === 'unread' ? !card.dataset.status
+                                               : card.dataset.status === statusFilter));
+    passes.set(card, ok);
   });
+
+  /* pick one representative per series among the cards that passed */
+  const repOf = new Map();   // series key -> representative card
+  const countOf = new Map(); // series key -> how many passed
+  if(grouped){
+    sortedOrder().forEach(i => {
+      const card = document.getElementById('card-' + i);
+      if(!card || !passes.get(card)) return;
+      const k = card.dataset.series;
+      if(!k) return;
+      countOf.set(k, (countOf.get(k) || 0) + 1);
+      if(!repOf.has(k)) repOf.set(k, card);
+    });
+  }
+
+  document.querySelectorAll('.card').forEach(card => {
+    const ok = passes.get(card);
+    const k = card.dataset.series;
+    const tag = card.querySelector('.series-tag');
+    let show = ok;
+
+    card.classList.remove('is-rep','in-series');
+    if(tag){ tag.classList.remove('has-more'); tag.textContent = ''; }
+
+    if(ok && grouped && k){
+      const total = countOf.get(k) || 1;
+      const isRep = repOf.get(k) === card;
+      const open  = expandedSeries.has(k);
+
+      if(total > 1){
+        card.classList.add('in-series');
+        if(isRep){
+          card.classList.add('is-rep');
+          if(tag){
+            tag.classList.add('has-more');
+            tag.textContent = open ? '▾ hide ' + (total - 1) + ' more'
+                                   : '▸ ' + total + ' volumes in this series';
+          }
+        } else {
+          show = open;
+        }
+      }
+    }
+
+    card.style.display = show ? '' : 'none';
+    if(show) n++;
+  });
+
   document.getElementById('no-results').style.display = n ? 'none' : 'block';
 }
+
 document.querySelectorAll('.pill').forEach(p => {
   p.addEventListener('click', () => {
     document.querySelectorAll('.pill').forEach(x => x.classList.remove('active'));
@@ -1353,6 +1641,26 @@ document.querySelectorAll('.pill').forEach(p => {
     applyFilters();
   });
 });
+
+document.getElementById('sort-by').addEventListener('change', e => {
+  sortBy = e.target.value;
+  applySort();
+  applyFilters();
+});
+
+document.getElementById('status-filter').addEventListener('change', e => {
+  statusFilter = e.target.value;
+  applyFilters();
+});
+
+document.getElementById('group-toggle').addEventListener('click', e => {
+  grouped = !grouped;
+  e.target.classList.toggle('on', grouped);
+  expandedSeries.clear();
+  applySort();
+  applyFilters();
+});
+
 document.getElementById('search').addEventListener('input', e => {
   term = e.target.value.toLowerCase().trim();
   applyFilters();
@@ -1373,6 +1681,8 @@ function stats(){
 renderRail();
 books.forEach((b,i) => renderCard(i));
 stats();
+applySort();
+applyFilters();
 
 (async () => {
   try{ initAuth(); }catch(e){ console.error('auth setup failed', e); }
@@ -1419,10 +1729,14 @@ window.addEventListener('appinstalled', () => {
 /* ---------- add a book ---------- */
 const addbox = () => document.getElementById('addbox');
 const AF = ['a-title-bn','a-title-en','a-author-bn','a-author-en','a-publisher','a-blurb','a-lent'];
+let dupAcknowledged = false;
 
 function openAdd(){
   document.getElementById('add-err').textContent = '';
   AF.forEach(id => document.getElementById(id).value = '');
+  document.getElementById('a-status').value = '';
+  document.getElementById('dup-warn').style.display = 'none';
+  dupAcknowledged = false;
   addbox().classList.add('open');
   document.body.style.overflow = 'hidden';
   document.getElementById('a-title-bn').focus();
@@ -1436,6 +1750,8 @@ function closeAdd(){
 function initAdd(){
   document.getElementById('a-category').innerHTML =
     CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
+  document.getElementById('a-status').innerHTML =
+    STATUSES.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
 
   attachPhonetic(document.getElementById('a-title-bn'));
   attachPhonetic(document.getElementById('a-author-bn'));
@@ -1465,6 +1781,33 @@ async function addBook(){
     return;
   }
 
+  /* --- duplicate check: warn once, then let it through --- */
+  const norm = t => (t || '').toLowerCase().replace(/[^a-z0-9\u0980-\u09FF]/g, '');
+  const nTitleEn = norm(titleEn), nTitleBn = norm(titleBn);
+  const nAuthor  = norm(v('a-author-en')) || norm(transliterateText(v('a-author-bn')));
+
+  const hit = books.findIndex(b => {
+    const sameTitle = (nTitleEn && norm(b.titleEn) === nTitleEn)
+                   || (nTitleBn && norm(b.titleBn) === nTitleBn);
+    if(!sameTitle) return false;
+    if(!nAuthor) return true;
+    const ba = norm(b.authorEn) || norm(b.authorBn);
+    return !ba || ba === nAuthor;
+  });
+
+  const warn = document.getElementById('dup-warn');
+  if(hit !== -1 && !dupAcknowledged){
+    const b = books[hit];
+    warn.innerHTML = 'Looks like this is already on the shelf — <b>' + esc(b.titleBn || b.titleEn) +
+                     '</b>' + (b.authorEn ? ' by ' + esc(b.authorEn) : '') +
+                     '. Tap <b>Add to shelf</b> again if you really do own two copies.';
+    warn.style.display = 'block';
+    dupAcknowledged = true;
+    err.textContent = '';
+    return;
+  }
+  warn.style.display = 'none';
+
   const lentTo = v('a-lent');
   books.push({
     titleBn:   titleBn || titleEn,
@@ -1474,13 +1817,15 @@ async function addBook(){
     publisher: v('a-publisher') || '—',
     blurb:     v('a-blurb'),
     category:  document.getElementById('a-category').value,
+    status:    document.getElementById('a-status').value,
     lentTo:    lentTo,
-    lentOn:    lentTo ? new Date().toISOString().slice(0,10) : ''
+    lentOn:    lentTo ? new Date().toISOString().slice(0,10) : '',
+    addedOn:   new Date().toISOString().slice(0,10)
   });
 
   const i = books.length - 1;
   renderCard(i);
-  renderRail(); stats(); applyFilters();
+  renderRail(); stats(); applySort(); applyFilters();
   closeAdd();
   await saveLending();
   const card = document.getElementById('card-'+i);
