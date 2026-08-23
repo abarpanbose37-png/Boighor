@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#EAE4E6">
+<title>আমার বইঘর · My Bookshelf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Hind+Siliguri:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* dusk mauve — soft, powdery, unhurried */
+    --paper:#EAE4E6;
+    --paper-2:#F4F0F1;
+    --card:#FCFAFA;
+    --ink:#2B2129;
+    --ink-2:#54464F;
+    --ink-soft:#8B7C85;
+    --rose:#B4798A;
+    --sage:#8B9E8C;
+    --ochre:#C29A5B;
+    --slate:#6F809B;
+    --plum:#7C5A76;
+    --clay:#B08272;
+    --line:rgba(43,33,41,0.13);
+    --line-soft:rgba(43,33,41,0.07);
+  }
+
+  *{box-sizing:border-box;}
+  html{
+    scroll-behavior:smooth;
+    color-scheme:light;
+    background-color:#EAE4E6;
+  }
+  body{
+    margin:0;
+    background-color:#EAE4E6;
+    background:#EAE4E6;
+    color:var(--ink);
+    font-family:'Hind Siliguri','Jost',system-ui,sans-serif;
+    font-size:16px;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:'';
+    position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+      radial-gradient(1000px 560px at 82% -8%, rgba(180,121,138,0.20), transparent 66%),
+      radial-gradient(860px 520px at 6% 26%, rgba(111,128,155,0.16), transparent 68%),
+      radial-gradient(760px 480px at 46% 104%, rgba(139,158,140,0.16), transparent 68%);
+  }
+  .wrap{
+    position:relative; z-index:1;
+    background-color:#EAE4E6;
+    min-height:100vh;
+  }
+
+  .bn{font-family:'Tiro Bangla','Hind Siliguri',serif;}
+  .body-bn{font-family:'Hind Siliguri',sans-serif;}
+  .lat{font-family:'Instrument Serif',serif;}
+  .mono{font-family:'Jost',sans-serif; letter-spacing:0.14em;}
+
+  /* ============ MASTHEAD ============ */
+  header{
+    padding:clamp(2.5rem,7vw,5rem) 6vw 0;
+    max-width:1500px; margin:0 auto;
+  }
+  .kicker{
+    display:flex; align-items:center; gap:0.7rem;
+    font-family:'Jost',sans-serif;
+    font-size:0.62rem; text-transform:uppercase; letter-spacing:0.34em; font-weight:400;
+    color:var(--ink-soft);
+    margin-bottom:1.8rem;
+  }
+  .kicker::after{
+    content:''; flex:1; height:1px;
+    background:linear-gradient(90deg, rgba(43,33,41,0.22), transparent);
+  }
+  h1{
+    margin:0;
+    font-family:'Tiro Bangla',serif;
+    font-weight:400;
+    font-size:clamp(3rem,11vw,7.6rem);
+    line-height:1.02;
+    letter-spacing:-0.005em;
+    color:var(--ink);
+  }
+  h1 .glow{
+    color:var(--plum);
+    background:linear-gradient(102deg, var(--plum) 0%, var(--rose) 42%, var(--clay) 72%, var(--ochre) 100%);
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  @supports not ((-webkit-background-clip:text) or (background-clip:text)){
+    h1 .glow{ background:none; -webkit-text-fill-color:#7C5A76; }
+  }
+  .h1-sub{
+    display:block;
+    font-family:'Instrument Serif',serif;
+    font-style:italic;
+    font-size:clamp(1.05rem,2.6vw,1.7rem);
+    letter-spacing:0.02em;
+    color:var(--ink-soft);
+    margin-top:0.9rem;
+  }
+  .lede{
+    max-width:46ch; margin-top:1.6rem;
+    font-size:1.05rem; line-height:1.75; color:var(--ink-2);
+  }
+  .lede strong{color:var(--plum); font-weight:600;}
+
+  .counts{
+    display:flex; flex-wrap:wrap; gap:0 2.6rem;
+    margin-top:2.2rem; padding-top:1.4rem;
+    border-top:1px solid var(--line);
+  }
+  .count .n{
+    font-family:'Tiro Bangla',serif; font-weight:700;
+    font-size:2.9rem; font-weight:400; line-height:1; color:var(--plum);
+    font-variant-numeric:tabular-nums;
+  }
+  .count .l{
+    font-family:'Jost',sans-serif;
+    font-size:0.6rem; text-transform:uppercase; letter-spacing:0.22em;
+    color:var(--ink-soft); margin-top:0.5rem;
+  }
+
+  /* ============ SIGNATURE: THE LIT ALMIRAH ============ */
+  .almirah{
+    margin:clamp(2.5rem,6vw,4.5rem) 0 0;
+    padding:0 0 0 6vw;
+    max-width:1500px; margin-left:auto; margin-right:auto;
+  }
+  .almirah-label{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding-right:6vw; margin-bottom:1.1rem;
+    font-family:'Jost',sans-serif;
+    font-size:0.62rem; text-transform:uppercase; letter-spacing:0.16em;
+    color:var(--ink-soft);
+  }
+  .case{
+    position:relative;
+    border-radius:22px 0 0 22px;
+    background:linear-gradient(180deg, rgba(252,250,250,0.85), rgba(244,240,241,0.6));
+    border:1px solid var(--line-soft);
+    border-right:none;
+    backdrop-filter:blur(6px);
+    padding:2.6rem 0 0 1.6rem;
+    overflow:hidden;
+  }
+  /* the strip light */
+  .case::before{
+    content:'';
+    position:absolute; top:0; left:8%; right:4%; height:2px;
+    background:linear-gradient(90deg, transparent, rgba(180,121,138,0.5), rgba(111,128,155,0.5), transparent);
+    filter:blur(1px);
+  }
+  .rail{
+    display:flex; align-items:flex-end; gap:2px;
+    overflow-x:auto; overflow-y:hidden;
+    padding:0 1.6rem 0 0;
+    scrollbar-width:thin;
+    scrollbar-color:rgba(240,231,214,0.15) transparent;
+  }
+  .rail::-webkit-scrollbar{height:5px;}
+  .rail::-webkit-scrollbar-thumb{background:rgba(240,231,214,0.15); border-radius:3px;}
+  .spine{
+    flex:0 0 auto;
+    width:32px;
+    border-radius:6px 6px 0 0;
+    display:flex; align-items:flex-start; justify-content:center;
+    padding-top:12px;
+    cursor:pointer;
+    border:none;
+    position:relative;
+    box-shadow:
+      inset -7px 0 12px -7px rgba(0,0,0,0.65),
+      inset 2px 0 0 rgba(255,255,255,0.07);
+    transition:transform 0.28s cubic-bezier(.2,.8,.3,1), filter 0.28s ease;
+    
+  }
+  .spine:hover, .spine:focus-visible{
+    transform:translateY(-16px);
+    filter:brightness(1.35) !important;
+    outline:none;
+  }
+  .spine:focus-visible{box-shadow:0 0 0 2px var(--marigold);}
+  .spine span{
+    writing-mode:vertical-rl;
+    font-family:'Hind Siliguri',sans-serif;
+    font-weight:500;
+    font-size:0.7rem;
+    white-space:nowrap;
+    opacity:0.92;
+  }
+  .plinth{
+    height:10px;
+    border-radius:0 0 0 22px;
+    margin-right:0;
+    background:linear-gradient(180deg, rgba(43,33,41,0.18), rgba(43,33,41,0.06));
+    box-shadow:0 20px 40px -22px rgba(43,33,41,0.5);
+  }
+
+  /* ============ CONTROLS ============ */
+  .toolbar{
+    max-width:1500px; margin:clamp(3rem,7vw,5rem) auto 0;
+    padding:0 6vw;
+    display:flex; flex-wrap:wrap; gap:0.8rem; align-items:center;
+  }
+  .search-wrap{position:relative; flex:1 1 260px; min-width:200px;}
+  #search{
+    width:100%;
+    padding:0.85rem 1rem 0.85rem 2.4rem;
+    background:var(--lacquer);
+    border:1px solid var(--line);
+    border-radius:999px;
+    color:var(--ink);
+    font-family:'Hind Siliguri',sans-serif;
+    font-size:0.98rem;
+  }
+  #search::placeholder{color:var(--ink-soft);}
+  #search:focus{outline:none; border-color:var(--rose); box-shadow:0 0 0 4px rgba(180,121,138,0.16);}
+  .search-wrap::before{
+    content:'⌕'; position:absolute; left:0.85rem; top:50%; transform:translateY(-52%);
+    color:var(--ink-soft); font-size:1.2rem; pointer-events:none;
+  }
+  .pill{
+    padding:0.62rem 1rem;
+    background:rgba(252,250,250,0.6);
+    border:1px solid var(--line);
+    border-radius:999px;
+    color:var(--ink-2);
+    font-family:'Jost',sans-serif;
+    font-size:0.66rem; text-transform:uppercase; letter-spacing:0.12em;
+    cursor:pointer;
+    transition:all 0.18s ease;
+    white-space:nowrap;
+  }
+  .pill:hover{border-color:var(--rose); color:var(--plum); background:var(--card);}
+  .pill.active{
+    background:var(--plum); border-color:var(--plum); color:#fff;
+  }
+  .toolbar-note{
+    max-width:1500px; margin:0.9rem auto 0; padding:0 6vw;
+    font-size:0.82rem; color:var(--ink-soft); line-height:1.6;
+  }
+
+  /* ============ CATALOGUE ============ */
+  .grid{
+    max-width:1500px; margin:0 auto;
+    padding:2.4rem 6vw 6rem;
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(292px,1fr));
+    gap:18px;
+  }
+  .card{
+    position:relative;
+    background:var(--card);
+    color:var(--ink);
+    border:1px solid var(--line-soft);
+    border-radius:18px;
+    padding:1.6rem 1.5rem 1.35rem;
+    display:flex; flex-direction:column;
+    min-height:242px;
+    transition:transform 0.3s cubic-bezier(.2,.8,.3,1), box-shadow 0.3s ease;
+    box-shadow:0 1px 2px rgba(43,33,41,0.04);
+  }
+  .card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 26px 44px -24px rgba(43,33,41,0.42);
+  }
+  .card-head{
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap;
+    gap:0.7rem; margin-bottom:1.1rem;
+  }
+  .cat{
+    display:inline-flex; align-items:center; gap:0.5rem;
+    font-family:'Jost',sans-serif;
+    font-size:0.6rem; text-transform:uppercase; letter-spacing:0.2em;
+    color:var(--ink-soft);
+  }
+  .cat::before{
+    content:''; width:7px; height:7px; border-radius:50%;
+    background:var(--accent,var(--rose));
+  }
+  .edit-btn{
+    background:transparent; border:1px solid var(--line);
+    color:var(--ink-soft);
+    font-family:'Jost',sans-serif;
+    font-size:0.56rem; text-transform:uppercase; letter-spacing:0.16em;
+    padding:0.34rem 0.7rem; border-radius:999px; cursor:pointer;
+    transition:all 0.18s ease; flex:0 0 auto;
+  }
+  .edit-btn:hover{border-color:var(--rose); color:var(--plum);}
+  .title-btn{
+    display:block; width:100%; text-align:left;
+    background:none; border:none; padding:0; margin:0;
+    cursor:pointer; color:inherit;
+  }
+  .title-btn .t-bn{
+    display:block;
+    font-family:'Tiro Bangla',serif;
+    font-size:1.5rem; line-height:1.4;
+    color:var(--ink);
+    transition:color 0.2s ease;
+  }
+  .title-btn:hover .t-bn{color:var(--plum);}
+  .title-btn .t-en{
+    display:block;
+    font-family:'Instrument Serif',serif;
+    font-style:italic;
+    font-size:1rem; color:var(--ink-soft);
+    margin-top:0.35rem;
+  }
+  .byline{
+    margin-top:1.05rem;
+    font-family:'Hind Siliguri',sans-serif;
+    font-size:1rem; color:var(--ink-2);
+  }
+  .byline-en{
+    font-family:'Instrument Serif',serif; font-style:italic;
+    font-size:0.84rem; color:var(--ink-soft); margin-top:0.1rem;
+  }
+  .meta{
+    margin-top:auto; padding-top:1.1rem;
+    border-top:1px solid var(--line-soft);
+    display:flex; justify-content:space-between; align-items:center; gap:0.6rem;
+    font-family:'Jost',sans-serif;
+    font-size:0.62rem; letter-spacing:0.1em; color:var(--ink-soft);
+  }
+  .detail-hint{
+    background:none; border:none; padding:0; cursor:pointer;
+    font-family:'Jost',sans-serif; font-size:0.62rem;
+    letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--plum);
+  }
+  .detail-hint:hover{color:var(--rose);}
+
+  /* ============ EDIT FORM ============ */
+  .edit-form label{
+    display:flex; justify-content:space-between; align-items:center; gap:0.4rem;
+    font-family:'Jost',sans-serif;
+    font-size:0.56rem; text-transform:uppercase; letter-spacing:0.12em;
+    color:var(--ink-soft); margin:0.85rem 0 0.35rem;
+  }
+  .edit-form input, .edit-form select{
+    width:100%; padding:0.55rem 0.65rem;
+    background:var(--paper-2); border:1px solid var(--line);
+    border-radius:10px; color:var(--ink);
+    font-family:'Hind Siliguri',sans-serif; font-size:0.94rem;
+  }
+  .edit-form input:focus, .edit-form select:focus{outline:none; border-color:var(--rose); box-shadow:0 0 0 3px rgba(180,121,138,0.16);}
+  .edit-form input.bn-input{font-family:'Tiro Bangla',serif; font-size:1.05rem;}
+  .translit-hint{
+    text-transform:none; letter-spacing:0; font-style:italic;
+    color:var(--sage); font-size:0.62rem;
+  }
+  .edit-actions{display:flex; gap:0.5rem; margin-top:1.1rem;}
+  .save-btn,.cancel-btn{
+    font-family:'Jost',sans-serif; font-size:0.64rem;
+    text-transform:uppercase; letter-spacing:0.12em;
+    padding:0.55rem 1rem; border-radius:2px; cursor:pointer; border:1px solid transparent;
+  }
+  .save-btn{background:var(--plum); color:#fff; border-radius:999px;}
+  .save-btn:hover{background:var(--rose);}
+  .cancel-btn{background:transparent; border:1px solid var(--line); color:var(--ink-soft); border-radius:999px;}
+  .cancel-btn:hover{border-color:var(--ink-soft); color:var(--ink);}
+  .edit-note{
+    margin-top:0.9rem; font-size:0.72rem; line-height:1.55;
+    color:var(--ink-soft);
+    border-top:1px solid var(--line-soft); padding-top:0.7rem;
+  }
+
+  /* ============ DETAIL SHEET ============ */
+  .backdrop{
+    display:none; position:fixed; inset:0; z-index:100;
+    background:rgba(43,33,41,0.42);
+    backdrop-filter:blur(10px);
+    padding:5vh 5vw; overflow-y:auto;
+  }
+  .backdrop.open{display:block; animation:fade 0.2s ease;}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .sheet{
+    position:relative;
+    max-width:640px; margin:0 auto;
+    background:var(--card);
+    border:1px solid var(--line-soft);
+    border-radius:24px;
+    box-shadow:0 50px 100px -40px rgba(43,33,41,0.55);
+    padding:2.8rem 2.3rem 2rem;
+    animation:rise 0.32s cubic-bezier(.2,.8,.3,1);
+  }
+  @keyframes rise{from{opacity:0; transform:translateY(16px)}to{opacity:1; transform:none}}
+  .sheet::before{
+    content:'';
+    position:absolute; left:0; right:0; top:0; height:4px;
+    background:var(--accent,var(--vermilion));
+  }
+  .sheet-close{
+    position:absolute; top:0.7rem; right:0.9rem;
+    background:none; border:none; color:var(--ink-soft);
+    font-size:1.7rem; line-height:1; cursor:pointer; padding:0.2rem 0.4rem;
+  }
+  .sheet-close:hover{color:var(--rose);}
+  .s-cat{
+    font-family:'Jost',sans-serif;
+    font-size:0.6rem; text-transform:uppercase; letter-spacing:0.24em;
+    color:var(--ink-soft); margin-bottom:1rem;
+    display:inline-flex; align-items:center; gap:0.55rem;
+  }
+  .s-title-bn::before{content:''; }
+  .s-title-bn{
+    font-family:'Tiro Bangla',serif; font-weight:400;
+    font-size:clamp(1.9rem,5vw,2.7rem); line-height:1.32;
+    color:var(--ink);
+  }
+  .s-title-en{
+    font-family:'Instrument Serif',serif;
+    font-weight:300; font-style:italic;
+    font-size:1.15rem; color:var(--ink-soft);
+    margin:0.5rem 0 1.7rem;
+  }
+  .s-row{
+    display:flex; gap:1.1rem; padding:0.75rem 0;
+    border-top:1px solid var(--line-soft);
+  }
+  .s-label{
+    flex:0 0 100px;
+    font-family:'Jost',sans-serif;
+    font-size:0.56rem; text-transform:uppercase; letter-spacing:0.12em;
+    color:var(--ink-soft); padding-top:0.3rem;
+  }
+  .s-value{flex:1; font-size:0.98rem; color:var(--ink-2); line-height:1.6;}
+  .s-value .big-bn{
+    font-family:'Tiro Bangla',serif; font-weight:500;
+    font-size:1.2rem; color:var(--ink); display:block;
+  }
+  .s-value .small-en{
+    font-family:'Instrument Serif',serif; font-style:italic;
+    font-size:0.8rem; color:var(--ink-soft);
+  }
+  .s-about{line-height:1.72; color:var(--ink-2);}
+  .s-actions{margin-top:1.5rem;}
+  .s-edit{
+    font-family:'Jost',sans-serif; font-size:0.64rem;
+    text-transform:uppercase; letter-spacing:0.12em;
+    padding:0.6rem 1rem; border-radius:2px; cursor:pointer;
+    background:transparent; color:var(--plum);
+    border:1px solid var(--rose); border-radius:999px;
+    letter-spacing:0.16em;
+  }
+  .s-edit:hover{background:var(--plum); color:#fff; border-color:var(--plum);}
+
+
+  /* ===== lending ===== */
+  .lent-flag{
+    display:inline-flex; align-items:center; gap:0.45rem;
+    margin-top:0.9rem; padding:0.4rem 0.75rem;
+    background:rgba(180,121,138,0.13);
+    border:1px solid rgba(180,121,138,0.35);
+    border-radius:999px;
+    font-family:'Jost',sans-serif;
+    font-size:0.64rem; letter-spacing:0.1em; color:var(--plum);
+  }
+  .card.is-lent{background:linear-gradient(180deg,#FCFAFA,#F6F1F3);}
+  .lend-btn{
+    background:transparent; border:1px solid var(--line); color:var(--ink-soft);
+    font-family:'Jost',sans-serif;
+    font-size:0.56rem; text-transform:uppercase; letter-spacing:0.16em;
+    padding:0.34rem 0.7rem; border-radius:999px; cursor:pointer; flex:0 0 auto;
+  }
+  .lend-btn:hover{border-color:var(--rose); color:var(--plum);}
+  .lend-btn.on{background:var(--plum); border-color:var(--plum); color:#fff;}
+  .s-lent{color:var(--plum); font-weight:600;}
+
+  .no-results{
+    display:none; padding:4rem 6vw; text-align:center;
+    color:var(--ink-soft); font-size:1rem;
+  }
+
+  footer{
+    max-width:1500px; margin:0 auto;
+    padding:2rem 6vw 4rem;
+    border-top:1px solid var(--line-soft);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.6rem;
+    font-family:'Jost',sans-serif;
+    font-size:0.62rem; letter-spacing:0.1em;
+    color:var(--ink-soft);
+  }
+
+  @media (max-width:620px){
+    .grid{grid-template-columns:1fr;}
+    .almirah{padding-left:5vw;}
+    header,.toolbar,.toolbar-note,.grid,footer{padding-left:5vw; padding-right:5vw;}
+    .sheet{padding:2rem 1.3rem 1.5rem;}
+    .s-row{flex-direction:column; gap:0.3rem;}
+    .s-label{flex:none;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important; transition:none !important;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">ব্যক্তিগত সংগ্রহ · private collection</div>
+  <h1>
+    <span class="bn glow">আমার বইঘর</span>
+    <span class="h1-sub lat">My Bookshelf — a Bengali reading room</span>
+  </h1>
+  <p class="lede">Detective fiction, thrillers and classics, catalogued spine by spine from a glass-fronted almirah. <strong>Byomkesh</strong>, <strong>Feluda</strong>, <strong>Shonku</strong>, Debarati Mukhopadhyay's true crime, Hemendrakumar Ray's omnibuses, and the shelf of Bengali literature behind them.</p>
+  <div class="counts">
+    <div class="count"><div class="n" id="stat-total">0</div><div class="l">বই · Books</div></div>
+    <div class="count"><div class="n" id="stat-authors">0</div><div class="l">লেখক · Authors</div></div>
+    <div class="count"><div class="n" id="stat-cats">0</div><div class="l">বিভাগ · Shelves</div></div>
+    <div class="count"><div class="n" id="stat-lent">0</div><div class="l">ধার · Lent out</div></div>
+  </div>
+</header>
+
+<section class="almirah">
+  <div class="almirah-label">
+    <span>the shelf, left to right</span>
+    <span>tap a spine ↓</span>
+  </div>
+  <div class="case">
+    <div class="rail" id="rail"></div>
+    <div class="plinth"></div>
+  </div>
+</section>
+
+<div class="toolbar">
+  <div class="search-wrap">
+    <input id="search" type="text" placeholder="খুঁজুন · search title, author, or notes">
+  </div>
+  <button class="pill active" data-filter="all">সব · All</button>
+  <button class="pill" data-filter="Detective">গোয়েন্দা · Detective</button>
+  <button class="pill" data-filter="Thriller">রোমাঞ্চ · Thriller</button>
+  <button class="pill" data-filter="Literature">সাহিত্য · Literature</button>
+  <button class="pill" data-filter="Children's">কিশোর · Children's</button>
+  <button class="pill" data-filter="Sci-Fi">কল্পবিজ্ঞান · Sci-Fi</button>
+  <button class="pill" data-filter="__lent">ধার · Lent out</button>
+  <button class="pill" data-filter="Anthology">সংকলন · Anthology</button>
+</div>
+<p class="toolbar-note">Bengali fields accept phonetic typing — write <span class="mono">sharadindu</span> and it becomes শরদিন্দু as you go.</p>
+
+<div class="grid" id="grid"></div>
+<p class="no-results" id="no-results">কিছু পাওয়া গেল না · Nothing matches that search. Try a different word, or clear the filter.</p>
+
+<div class="backdrop" id="backdrop">
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true">
+    <button class="sheet-close" id="sheet-close" aria-label="Close">×</button>
+    <div id="sheet-body"></div>
+  </div>
+</div>
+
+<footer>
+  <span>catalogued from four shelves · আগস্ট ২০২৬</span>
+  <span id="footer-count"></span>
+</footer>
+
+</div>
+<script>
+const books = [
+  {titleBn:"ব্যোমকেশ সমগ্র", titleEn:"Byomkesh Samagra", authorBn:"শরদিন্দু বন্দ্যোপাধ্যায়", authorEn:"Sharadindu Bandyopadhyay", publisher:"Ananda Publishers", category:"Detective", accent:"#3b3530", blurb:"The complete Byomkesh Bakshi stories. Sharadindu's 'satyanweshi' (truth-seeker) — never a detective, he insists — solves crimes in colonial and post-independence Bengal through pure deduction."},
+  {titleBn:"দশটি উপন্যাস", titleEn:"Dashti Upanyas (Ten Novels)", authorBn:"শরদিন্দু বন্দ্যোপাধ্যায়", authorEn:"Sharadindu Bandyopadhyay", publisher:"Ananda Publishers", category:"Detective", accent:"var(--oxblood)", blurb:"Ten novels by Sharadindu spanning romance, historical fiction, and mystery, showing his range well beyond the Byomkesh stories."},
+  {titleBn:"ফেলুদা সমগ্র ১", titleEn:"Feluda Samagra, Vol. 1", authorBn:"সত্যজিৎ রায়", authorEn:"Satyajit Ray", publisher:"Ananda Publishers", category:"Detective", accent:"var(--oxblood)", blurb:"The first collected volume of Satyajit Ray's Feluda — Pradosh Mitter, the Calcutta private investigator, with cousin Topshe and thriller-writer Jatayu."},
+  {titleBn:"ফেলুদা সমগ্র ২", titleEn:"Feluda Samagra, Vol. 2", authorBn:"সত্যজিৎ রায়", authorEn:"Satyajit Ray", publisher:"Ananda Publishers", category:"Detective", accent:"var(--oxblood)", blurb:"The second Feluda omnibus, gathering the later adventures across India and abroad."},
+  {titleBn:"প্রফেসর শঙ্কু সমগ্র", titleEn:"Professor Shonku Samagra", authorBn:"সত্যজিৎ রায়", authorEn:"Satyajit Ray", publisher:"Ananda Publishers", category:"Sci-Fi", accent:"var(--silver)", blurb:"Satyajit Ray's collected Professor Shonku — the diary of an eccentric Giridih scientist whose inventions lead him into adventures across the world and beyond it."},
+  {titleBn:"গোয়েন্দা গার্গী সমগ্র ১", titleEn:"Goyenda Gargi Samagra, Vol. 1", authorBn:"তপন বন্দ্যোপাধ্যায়", authorEn:"Tapan Bandyopadhyay", publisher:"Dey's Publishing", category:"Detective", accent:"var(--red)", blurb:"First volume of Tapan Bandyopadhyay's Goyenda Gargi series (Dey's Publishing), featuring the woman detective Gargi. The series runs to at least eight volumes."},
+  {titleBn:"গোয়েন্দা গার্গী সমগ্র ২", titleEn:"Goyenda Gargi Samagra, Vol. 2", authorBn:"তপন বন্দ্যোপাধ্যায়", authorEn:"Tapan Bandyopadhyay", publisher:"Dey's Publishing", category:"Detective", accent:"var(--red)", blurb:"Second collected volume of Tapan Bandyopadhyay's Gargi mysteries."},
+  {titleBn:"গোয়েন্দা গার্গী সমগ্র ৩", titleEn:"Goyenda Gargi Samagra, Vol. 3", authorBn:"তপন বন্দ্যোপাধ্যায়", authorEn:"Tapan Bandyopadhyay", publisher:"Dey's Publishing", category:"Detective", accent:"var(--red)", blurb:"Third collected volume of the Goyenda Gargi series by Tapan Bandyopadhyay."},
+  {titleBn:"গোয়েন্দা গার্গী সমগ্র ৪", titleEn:"Goyenda Gargi Samagra, Vol. 4", authorBn:"তপন বন্দ্যোপাধ্যায়", authorEn:"Tapan Bandyopadhyay", publisher:"Dey's Publishing", category:"Detective", accent:"var(--red)", blurb:"Fourth collected volume of the Goyenda Gargi series by Tapan Bandyopadhyay."},
+  {titleBn:"গোয়েন্দা গার্গী সমগ্র ৫", titleEn:"Goyenda Gargi Samagra, Vol. 5", authorBn:"তপন বন্দ্যোপাধ্যায়", authorEn:"Tapan Bandyopadhyay", publisher:"Dey's Publishing", category:"Detective", accent:"var(--red)", blurb:"Fifth collected volume of the Goyenda Gargi series by Tapan Bandyopadhyay."},
+  {titleBn:"রহস্য সমগ্র", titleEn:"Rahasya Samagra", authorBn:"শীর্ষেন্দু মুখোপাধ্যায়", authorEn:"Shirshendu Mukhopadhyay", publisher:"—", category:"Detective", accent:"var(--red)", blurb:"Shirshendu Mukhopadhyay's collected mystery writing — his signature blend of the eerie, the comic, and the everyday."},
+  {titleBn:"কিশোর উপন্যাস সমগ্র", titleEn:"Kishor Upanyas Samagra", authorBn:"শীর্ষেন্দু মুখোপাধ্যায়", authorEn:"Shirshendu Mukhopadhyay", publisher:"Ananda Publishers", category:"Children's", accent:"var(--yellow)", blurb:"Shirshendu's collected novels for young readers, full of ghosts, rural Bengal, oddball villains and gentle humour."},
+  {titleBn:"পাণ্ডব গোয়েন্দা সমগ্র ১", titleEn:"Pandab Goyenda Samagra, Vol. 1", authorBn:"ষষ্ঠীপদ চট্টোপাধ্যায়", authorEn:"Shashthipada Chattopadhyay", publisher:"—", category:"Children's", accent:"var(--brown)", blurb:"The first omnibus of Pandab Goyenda — five children and a dog, Bengal's best-loved junior detective team."},
+  {titleBn:"সেরা রহস্য-পঁচিশ", titleEn:"Sera Rahasya-Pochish", authorBn:"ষষ্ঠীপদ চট্টোপাধ্যায়", authorEn:"Shashthipada Chattopadhyay", publisher:"—", category:"Anthology", accent:"var(--ink)", blurb:"Twenty-five selected mystery stories by Shashthipada Chattopadhyay, the creator of Pandab Goyenda."},
+  {titleBn:"দশটি কিশোর উপন্যাস", titleEn:"Dashti Kishor Upanyas", authorBn:"মতি নন্দী", authorEn:"Moti Nandi", publisher:"—", category:"Children's", accent:"var(--indigo)", blurb:"Ten young-adult novels by Moti Nandi, known for sports fiction like Koni and Striker that treats children's ambition seriously."},
+  {titleBn:"সেরা গোয়েন্দা উপন্যাস", titleEn:"Sera Goyenda Upanyas", authorBn:"অদ্রীশ বর্ধন", authorEn:"Adrish Bardhan", publisher:"—", category:"Anthology", accent:"var(--indigo)", blurb:"Selected detective novels assembled by Adrish Bardhan, the writer-editor who pioneered Bengali science fiction and founded the magazine Ashchorjo."},
+  {titleBn:"সেকালের গোয়েন্দা গল্প", titleEn:"Sekaler Goyenda Golpo", authorBn:"—", authorEn:"(editor on front cover, not spine)", publisher:"Ananda Publishers", category:"Anthology", accent:"var(--mustard)", blurb:"An anthology of early Bengali detective fiction — the genre's first generation, before Byomkesh and Feluda."},
+
+  /* -------- second shelf: Debarati Mukhopadhyay + Souvik Chakraborty -------- */
+  {titleBn:"হারিয়ে যাওয়া খুনিরা", titleEn:"Hariye Jaowa Khunira", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Book Farm", category:"Thriller", accent:"var(--red)", blurb:"True-crime narrative reconstructing forgotten murder cases from Bengal's colonial past. The first book in Debarati Mukhopadhyay's series of the same name."},
+  {titleBn:"ডাকাত রাজা", titleEn:"Dakat Raja", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Patra Bharti", category:"Thriller", accent:"var(--ink)", blurb:"A historical novel by Debarati Mukhopadhyay, widely cited by readers as one of her breakout books."},
+  {titleBn:"নরক সংকেত", titleEn:"Narak Sanket", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Book Farm", category:"Thriller", accent:"var(--oxblood)", blurb:"A thriller set in Europe, weaving present-day terrorism and the Middle Eastern refugee crisis together with the political wreckage of post-WWI Germany and the early days of Hitler's career."},
+  {titleBn:"অঘোরে ঘুমিয়ে শিব", titleEn:"Aghore Ghumiye Shib", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Book Farm", category:"Thriller", accent:"var(--brown)", blurb:"Built around the contested claim that the Taj Mahal was once a Shiva temple, Tejo Mahalaya — a mystery running between Agra's monument and its history. Book Farm, 2018."},
+  {titleBn:"দেবারতির সেরা থ্রিলার", titleEn:"Debaratir Sera Thriller", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Deep Prakashan", category:"Thriller", accent:"var(--ink)", blurb:"A collection of the author's own selected thrillers."},
+  {titleBn:"শিখণ্ডী", titleEn:"Shikhandi", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Deep Prakashan", category:"Thriller", accent:"var(--oxblood)", blurb:"A novel Debarati describes as being about unconditional friendship, with empathy as its precondition."},
+  {titleBn:"গ্লানির্ভবতি ভারত", titleEn:"Glanirbhabati Bharat", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Deep Prakashan", category:"Thriller", accent:"var(--ink)", blurb:"A Debarati Mukhopadhyay novel; the title echoes the Gita's line on righteousness in decline."},
+  {titleBn:"দুঃসাহসের ইজারা", titleEn:"Duhsahoser Ijara", authorBn:"গৌতম ও দেবারতি মুখোপাধ্যায়", authorEn:"Goutam & Debarati Mukhopadhyay", publisher:"Deep Prakashan", category:"Thriller", accent:"var(--ink)", blurb:"A co-authored volume — the spine carries a second name alongside Debarati Mukhopadhyay's."},
+  {titleBn:"বাবু ও বারবনিতা", titleEn:"Babu O Barbanita", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Book Farm", category:"Thriller", accent:"var(--oxblood)", blurb:"Volume 2 of the Hariye Jaowa Khunira true-crime series: two long narratives set in Sonagachi, north Calcutta, across the late 19th and early 20th centuries, both centred on accused serial killers. Police officer Priyanath Mukhopadhyay features."},
+  {titleBn:"জন্তু — হারিয়ে যাওয়া খুনিরা ৪", titleEn:"Jantu (Hariye Jaowa Khunira, Vol. 4)", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Deep Prakashan", category:"Thriller", accent:"var(--ink)", blurb:"Fourth volume in the Hariye Jaowa Khunira true-crime series."},
+  {titleBn:"দাশগুপ্ত ট্রাভেলস", titleEn:"Dasgupta Travels", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Book Farm", category:"Thriller", accent:"var(--silver)", blurb:"A Debarati Mukhopadhyay novel, first published December 2019."},
+  {titleBn:"ঈশ্বরের অন্তিম শ্বাস", titleEn:"Ishwarer Antim Shwas", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Deep Prakashan", category:"Thriller", accent:"var(--mustard)", blurb:"A Debarati Mukhopadhyay novel."},
+  {titleBn:"কৃষ্ণসিন্দুকী", titleEn:"Krishnasinduki", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Deep Prakashan", category:"Thriller", accent:"var(--mustard)", blurb:"Published June 2024. A historical novel centred on the young revolutionaries Ullaskar Dutta and Indubhushan Roy."},
+  {titleBn:"৭ শিহরণ", titleEn:"Saat Shihoron", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Dev Sahitya Kutir", category:"Thriller", accent:"var(--ink)", blurb:"Seven chilling tales, from Dev Sahitya Kutir."},
+  {titleBn:"লিলি", titleEn:"Lily — six 18+ tales", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Dev Sahitya Kutir", category:"Thriller", accent:"var(--ink)", blurb:"Six adult stories and novellas, some previously uncollected, published by Dev Sahitya Kutir for the Kolkata Book Fair."},
+  {titleBn:"নীলাম্বরের খিদে", titleEn:"Nilambarer Khide", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Book Farm", category:"Thriller", accent:"var(--ink)", blurb:"A Debarati Mukhopadhyay novel from Book Farm."},
+  {titleBn:"উল্লাসকর", titleEn:"Ullaskar — Vol. 1", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Deep Prakashan", category:"Thriller", accent:"var(--mustard)", blurb:"Subtitled 'an epic of bombs, revolution, love and Partition' — the first volume of a historical novel about the revolutionary Ullaskar Dutta."},
+  {titleBn:"মৃত্যু যখন দুবার আসে", titleEn:"Mrityu Jokhon Dubar Ashe", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Deep Prakashan", category:"Thriller", accent:"var(--silver)", blurb:"A Debarati Mukhopadhyay thriller."},
+  {titleBn:"গন্তব্য এখনো এক সভ্যতা দেরি", titleEn:"Gontobyo Ekhono Ek Sobhyota Deri", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Deep Prakashan", category:"Thriller", accent:"var(--oxblood)", blurb:"A Debarati Mukhopadhyay novel — the title translates roughly as 'the destination is still one civilisation away'."},
+  {titleBn:"ঈশ্বর যখন বন্দি", titleEn:"Ishwar Jokhon Bondi", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"BIVA", category:"Thriller", accent:"var(--ink)", blurb:"Debarati Mukhopadhyay's first novel — a supernatural thriller giving a scientific reading of a myth around a mysterious figure from some fifteen centuries ago, blending history, mythology and science."},
+  {titleBn:"নীরেন ভাদুড়ি সমগ্র (প্রথম খণ্ড)", titleEn:"Niren Bhaduri Samagra, Vol. 1", authorBn:"সৌভিক চক্রবর্তী", authorEn:"Souvik Chakraborty", publisher:"Deep Prakashan", category:"Detective", accent:"var(--indigo)", blurb:"April 2021. Sri Nirendranath Bhaduri, a retired Sanskrit professor turned scholar of tantra, investigates the seemingly supernatural — written on the premise that even the uncanny has a logic."},
+  {titleBn:"নীরেন ভাদুড়ি সমগ্র (দ্বিতীয় খণ্ড)", titleEn:"Niren Bhaduri Samagra, Vol. 2", authorBn:"সৌভিক চক্রবর্তী", authorEn:"Souvik Chakraborty", publisher:"Deep Prakashan", category:"Detective", accent:"var(--ink)", blurb:"The second Niren Bhaduri collection, told in the cadence of classic detective stories but rooted in tantric lore."},
+  {titleBn:"নীরেন ভাদুড়ি সমগ্র (তৃতীয় খণ্ড)", titleEn:"Niren Bhaduri Samagra, Vol. 3", authorBn:"সৌভিক চক্রবর্তী", authorEn:"Souvik Chakraborty", publisher:"Deep Prakashan", category:"Detective", accent:"var(--red)", blurb:"October 2025. Draws on Mesopotamian myth and the Epic of Gilgamesh; the author names the goddess Inanna as the figure that most fascinated him."},
+  {titleBn:"নারাচ", titleEn:"Narach", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"Patra Bharti", category:"Thriller", accent:"var(--brown)", blurb:"August 2020. Built around the real 1887 sinking of a pilgrim ship bound from Howrah to Puri, in which some 750 people died — most of them women — an event that slipped out of public memory. A sequel, Magnanarach, followed."},
+
+  /* -------- third shelf: Bengali literature & classics -------- */
+  {titleBn:"উত্তরাধিকার", titleEn:"Uttaradhikar", authorBn:"সমরেশ মজুমদার", authorEn:"Samaresh Majumdar", publisher:"—", category:"Literature", accent:"var(--indigo)", blurb:"The first novel of Samaresh Majumdar's Animesh trilogy, following a boy's childhood in a North Bengal tea-garden town."},
+  {titleBn:"কালবেলা", titleEn:"Kalbela", authorBn:"সমরেশ মজুমদার", authorEn:"Samaresh Majumdar", publisher:"Ananda Publishers", category:"Literature", accent:"var(--silver)", blurb:"The celebrated second novel of the trilogy — Animesh arrives in Calcutta and is drawn into the Naxalite movement of the late 1960s. Won the Sahitya Akademi Award."},
+  {titleBn:"অর্জুন সমগ্র ১", titleEn:"Arjun Samagra, Vol. 1", authorBn:"সমরেশ মজুমদার", authorEn:"Samaresh Majumdar", publisher:"Ananda Publishers", category:"Detective", accent:"var(--silver)", blurb:"Collected adventures of Arjun, Samaresh Majumdar's young detective from Jalpaiguri."},
+  {titleBn:"দারোগার দপ্তর ১", titleEn:"Darogar Daptar, Vol. 1", authorBn:"রায়বাহাদুর প্রিয়নাথ মুখোপাধ্যায়", authorEn:"Raybahadur Priyanath Mukhopadhyay", publisher:"—", category:"Detective", accent:"var(--oxblood)", blurb:"The memoirs of Priyanath Mukhopadhyay, a real Calcutta police detective of the late 19th century — often called the first true-crime writing in Bengali, and a direct ancestor of the Bengali detective story."},
+  {titleBn:"পরশুরাম গল্পসমগ্র", titleEn:"Parashuram Galpasamagra", authorBn:"রাজশেখর বসু", authorEn:"Rajshekhar Basu (Parashuram)", publisher:"Patra Bharti", category:"Literature", accent:"var(--mustard)", blurb:"The complete stories of Rajshekhar Basu, writing as Parashuram — the sharpest satirist in Bengali, whose comic pieces skewer middle-class Calcutta."},
+  {titleBn:"মহাভারত (সারানুবাদ)", titleEn:"Mahabharata — abridged translation", authorBn:"রাজশেখর বসু", authorEn:"Rajshekhar Basu", publisher:"Patra Bharti", category:"Literature", accent:"var(--brown)", blurb:"Rajshekhar Basu's celebrated Bengali prose abridgement of the Mahabharata — a standard, highly readable rendering of Vyasa's epic."},
+  {titleBn:"পঞ্চাশটি প্রিয় গল্প", titleEn:"Ponchashti Priyo Golpo", authorBn:"বুদ্ধদেব গুহ", authorEn:"Buddhadeb Guha", publisher:"Ma", category:"Literature", accent:"#4a7c3f", blurb:"Fifty favourite stories by Buddhadeb Guha, a writer known for forests, hunting, music and the pull of the wild."},
+  {titleBn:"লোটাকম্বল", titleEn:"Lotakambal", authorBn:"সঞ্জীব চট্টোপাধ্যায়", authorEn:"Sanjib Chattopadhyay", publisher:"Ananda Publishers", category:"Literature", accent:"var(--ink)", blurb:"Sanjib Chattopadhyay's best-known novel — a wry, warm coming-of-age story of a young man and his eccentric father, and one of the most loved Bengali books of its era."},
+  {titleBn:"গল্পসমগ্র", titleEn:"Galpasamagra", authorBn:"সঞ্জীব চট্টোপাধ্যায়", authorEn:"Sanjib Chattopadhyay", publisher:"—", category:"Literature", accent:"var(--red)", blurb:"The collected stories of Sanjib Chattopadhyay, blending humour, satire and a quiet spiritual streak."},
+  {titleBn:"শরৎ রচনাবলী ২", titleEn:"Sarat Rachanabali, Vol. 2", authorBn:"শরৎচন্দ্র চট্টোপাধ্যায়", authorEn:"Sarat Chandra Chattopadhyay", publisher:"Ma", category:"Literature", accent:"var(--mustard)", blurb:"Second volume of the collected works of Sarat Chandra Chattopadhyay — Devdas, Parineeta, Srikanta and the rest of the writer who mapped Bengali domestic and social life."},
+  {titleBn:"গল্পগুচ্ছ", titleEn:"Galpaguchchha", authorBn:"রবীন্দ্রনাথ ঠাকুর", authorEn:"Rabindranath Tagore", publisher:"Shubham", category:"Literature", accent:"var(--oxblood)", blurb:"Rabindranath Tagore's collected short stories — Kabuliwala, Postmaster, Nashtanir and dozens more, the foundation of the modern Bengali short story."},
+  {titleBn:"শিবরাম রচনাবলী ২", titleEn:"Shibram Rachanabali, Vol. 2", authorBn:"শিবরাম চক্রবর্তী", authorEn:"Shibram Chakraborty", publisher:"—", category:"Literature", accent:"var(--oxblood)", blurb:"Collected works of Shibram Chakraborty, master of Bengali wordplay and absurd comedy — Harshabardhan and Gobardhan, and puns that have never been bettered."},
+  {titleBn:"শিকাগোয় বিবেকানন্দ : শতবর্ষ পরে", titleEn:"Shikagoy Vivekananda: Shatabarsha Pore", authorBn:"শিশির কর", authorEn:"Shishir Kar", publisher:"—", category:"Literature", accent:"var(--mustard)", blurb:"Shishir Kar revisits Vivekananda's 1893 Chicago address a century on, examining what actually happened at the Parliament of Religions."},
+  {titleBn:"অচেনা অজানা বিবেকানন্দ", titleEn:"Ochena Ojana Vivekananda", authorBn:"শংকর", authorEn:"Shankar", publisher:"Ma", category:"Literature", accent:"var(--brown)", blurb:"Shankar's portrait of the less-known Vivekananda — the finances, the illnesses, the family troubles behind the public monk."},
+  {titleBn:"অর্ক সমগ্র ১", titleEn:"Arka Samagra, Vol. 1", authorBn:"পল্লব হালদার", authorEn:"Pallab Haldar", publisher:"—", category:"Detective", accent:"var(--ink)", blurb:"First collected volume of Pallab Haldar's detective Arka."},
+  {titleBn:"গোপাল ভাঁড়ের সন্ধানে", titleEn:"Gopal Bhanrer Sondhane", authorBn:"সুজিত রায়", authorEn:"Sujit Ray", publisher:"—", category:"Literature", accent:"var(--red)", blurb:"Sujit Ray goes looking for the historical Gopal Bhar, the legendary jester of the Nadia court whose tales every Bengali child grows up on."},
+  {titleBn:"আবার তিক্কতি পুঁথি", titleEn:"Abar Tikkoti Punthi", authorBn:"শ্যামল ঘোষ", authorEn:"Shyamal Ghosh", publisher:"—", category:"Children's", accent:"var(--paper-deep)", blurb:"A humorous work by Shyamal Ghosh."},
+  {titleBn:"রানুকাকিমার লখনৌ অভিযান", titleEn:"Ranukakimar Lucknow Abhijan", authorBn:"ভাস্কর চট্টোপাধ্যায়", authorEn:"Bhaskar Chattopadhyay", publisher:"—", category:"Children's", accent:"var(--mustard)", blurb:"Bhaskar Chattopadhyay's adventure story taking Ranu-kakima to Lucknow."},
+  {titleBn:"ঝাল মুড়ি", titleEn:"Jhal Muri", authorBn:"মনোজ সেন", authorEn:"Manoj Sen", publisher:"Book Farm", category:"Literature", accent:"var(--red)", blurb:"A collection by Manoj Sen, published by Book Farm."},
+
+  /* -------- fourth shelf: Goyendapith Lalbazar, Smaranjit, Hemendrakumar Ray -------- */
+  {titleBn:"আবার গোয়েন্দাপীঠ — শ্বাসরোধী সাত কাহিনির সাতসতেরো", titleEn:"Abar Goyendapith — Shwasrodhi Saat Kahinir Saatsatero", authorBn:"সুপ্রতিম সরকার", authorEn:"Supratim Sarkar", publisher:"Ananda Publishers", category:"Detective", accent:"var(--oxblood)", blurb:"Seven breathless cases retold by Supratim Sarkar, a senior Kolkata Police officer, in the follow-up to his Goyendapith Lalbazar books."},
+  {titleBn:"গোয়েন্দাপীঠ লালবাজার ২ — স্টোনম্যানসহ এগারোটি রোমহর্ষক মামলার শেষকথা", titleEn:"Goyendapith Lalbazar 2", authorBn:"সুপ্রতিম সরকার", authorEn:"Supratim Sarkar", publisher:"Ananda Publishers", category:"Detective", accent:"var(--red)", blurb:"Eleven sensational Kolkata Police cases including the Stoneman killings, told from the inside by an officer of Lalbazar."},
+  {titleBn:"গোয়েন্দাপীঠ লালবাজার — এক ডজন খুনের রুদ্ধশ্বাস নেপথ্যকথা", titleEn:"Goyendapith Lalbazar", authorBn:"সুপ্রতিম সরকার", authorEn:"Supratim Sarkar", publisher:"Ananda Publishers", category:"Detective", accent:"var(--red)", blurb:"The book that made Supratim Sarkar a household name — the behind-the-scenes story of a dozen Kolkata murder investigations."},
+  {titleBn:"অদম্য", titleEn:"Adamya", authorBn:"স্মরণজিৎ চক্রবর্তী", authorEn:"Smaranjit Chakraborty", publisher:"Ananda Publishers", category:"Literature", accent:"var(--red)", blurb:"A novel by Smaranjit Chakraborty, one of the most widely read contemporary Bengali writers of young-adult romance and coming-of-age fiction."},
+  {titleBn:"অদম্য ২", titleEn:"Adamya, Vol. 2", authorBn:"স্মরণজিৎ চক্রবর্তী", authorEn:"Smaranjit Chakraborty", publisher:"Ananda Publishers", category:"Literature", accent:"var(--red)", blurb:"The second volume of Adamya."},
+  {titleBn:"ওয়ারেন দাদুর ধাঁধা-বাক্স", titleEn:"Warren Dadur Dhandha-Baksa", authorBn:"স্মরণজিৎ চক্রবর্তী", authorEn:"Smaranjit Chakraborty", publisher:"Ananda Publishers", category:"Children's", accent:"var(--brown)", blurb:"Grandfather Warren's box of riddles — a puzzle-adventure for younger readers."},
+  {titleBn:"ফিঙে", titleEn:"Phinge", authorBn:"স্মরণজিৎ চক্রবর্তী", authorEn:"Smaranjit Chakraborty", publisher:"Ananda Publishers", category:"Literature", accent:"var(--yellow)", blurb:"A Smaranjit Chakraborty novel, named for the drongo bird."},
+  {titleBn:"এটুকু বৃষ্টি...", titleEn:"Etuku Brishti...", authorBn:"স্মরণজিৎ চক্রবর্তী", authorEn:"Smaranjit Chakraborty", publisher:"Ananda Publishers", category:"Literature", accent:"var(--paper-deep)", blurb:"'Just this much rain…' — a novel in Smaranjit Chakraborty's characteristic wistful register."},
+  {titleBn:"জয়ন্ত মানিক সমগ্র (অখণ্ড)", titleEn:"Jayanta Manik Samagra — complete", authorBn:"হেমেন্দ্রকুমার রায়", authorEn:"Hemendrakumar Ray", publisher:"Deep Prakashan", category:"Detective", accent:"var(--ink)", blurb:"The complete Jayanta–Manik detective stories of Hemendrakumar Ray, one of the founding figures of Bengali children's adventure and mystery writing. Edited by Amitabha Chakraborty."},
+  {titleBn:"কিশোর ভৌতিক সমগ্র (অখণ্ড)", titleEn:"Kishor Bhoutik Samagra — complete", authorBn:"হেমেন্দ্রকুমার রায়", authorEn:"Hemendrakumar Ray", publisher:"Deep Prakashan", category:"Children's", accent:"var(--red)", blurb:"Hemendrakumar Ray's complete ghost stories for young readers, edited by Samudra Basu."},
+  {titleBn:"বিমল কুমার সমগ্র", titleEn:"Bimal Kumar Samagra", authorBn:"হেমেন্দ্রকুমার রায়", authorEn:"Hemendrakumar Ray", publisher:"Deep Prakashan", category:"Children's", accent:"var(--indigo)", blurb:"The complete Bimal–Kumar adventures — Hemendrakumar Ray's globe-trotting duo, forerunners of every Bengali adventure series since. Edited by Samudra Basu and Amitabha Chakraborty."},
+  {titleBn:"আবার যখের ধন", titleEn:"Abar Jaqher Dhan", authorBn:"হেমেন্দ্রকুমার রায়", authorEn:"Hemendrakumar Ray", publisher:"—", category:"Children's", accent:"var(--indigo)", blurb:"Sequel to Jaqher Dhan, the treasure-hunt novel that launched Bimal and Kumar and remains a Bengali children's classic."},
+  {titleBn:"রকস্টার", titleEn:"Rockstar", authorBn:"রূপম ইসলাম", authorEn:"Rupam Islam", publisher:"Deep Prakashan", category:"Literature", accent:"var(--silver)", blurb:"By Rupam Islam, frontman of the band Fossils and one of Bengali rock's defining voices."},
+  {titleBn:"ব্রহ্ম ঠাকুর ছুটু", titleEn:"Brahma Thakur Chhutu", authorBn:"রূপম ইসলাম", authorEn:"Rupam Islam", publisher:"—", category:"Literature", accent:"var(--paper-deep)", blurb:"A book by musician-author Rupam Islam."},
+  {titleBn:"অনামিকা বলে ডাকতে পারি কি তোমায়?", titleEn:"Anamika Bole Dakte Pari Ki Tomay?", authorBn:"রূপম ইসলাম", authorEn:"Rupam Islam", publisher:"—", category:"Literature", accent:"var(--paper-deep)", blurb:"'May I call you Anamika?' — by Rupam Islam."},
+  {titleBn:"শেষ মৃত পাখি", titleEn:"Shesh Mrito Pakhi", authorBn:"শাক্যজিৎ ভট্টাচার্য", authorEn:"Shakyajit Bhattacharya", publisher:"—", category:"Literature", accent:"var(--yellow)", blurb:"A novel by Shakyajit Bhattacharya."},
+  {titleBn:"এখানে ডেরেক বসে আছে", titleEn:"Ekhane Derek Bose Achhe", authorBn:"শাক্যজিৎ ভট্টাচার্য", authorEn:"Shakyajit Bhattacharya", publisher:"—", category:"Literature", accent:"var(--ink)", blurb:"'Derek sits here' — a novel by Shakyajit Bhattacharya."},
+  {titleBn:"রেলমানুষের তদন্তকথা ১", titleEn:"Relmanusher Tadantakatha, Vol. 1", authorBn:"তুষার সরদার", authorEn:"Tushar Sardar", publisher:"—", category:"Detective", accent:"var(--red)", blurb:"Investigation stories from a railway man — the first volume of Tushar Sardar's series."},
+  {titleBn:"রেলমানুষের তদন্তকথা ২", titleEn:"Relmanusher Tadantakatha, Vol. 2", authorBn:"তুষার সরদার", authorEn:"Tushar Sardar", publisher:"—", category:"Detective", accent:"var(--ink)", blurb:"The second volume of Tushar Sardar's railway investigation casebook."},
+  {titleBn:"কাকচক্ষু", titleEn:"Kakchokkhu", authorBn:"অভীক সরকার", authorEn:"Abhik Sarkar", publisher:"—", category:"Thriller", accent:"var(--paper-deep)", blurb:"By Abhik Sarkar, known for thrillers steeped in tantra, history and folklore."},
+  {titleBn:"আগ ছয়নি কো ভাগীরথী", titleEn:"Aag Chhoyni Ko Bhagirathi", authorBn:"দেবারতি মুখোপাধ্যায়", authorEn:"Debarati Mukhopadhyay", publisher:"—", category:"Thriller", accent:"var(--paper-deep)", blurb:"A Debarati Mukhopadhyay title lying flat on the lower shelf."},
+  {titleBn:"শ্মশানকোকিলের ডাক", titleEn:"Shmashankokiler Dak", authorBn:"সৌভিক চক্রবর্তী", authorEn:"Souvik Chakraborty", publisher:"—", category:"Thriller", accent:"var(--oxblood)", blurb:"'The call of the cremation-ground cuckoo' — by Souvik Chakraborty, author of the Niren Bhaduri series."},
+
+  /* -------- fifth shelf: Ekenbabu, Kaushik Majumdar, Damayanti -------- */
+  {titleBn:"অদ্ভুতুড়ে ভাতের হোটেল", titleEn:"Adbhuture Bhater Hotel", authorBn:"নিয়াজ মেহেদী", authorEn:"Niaz Mehedi", publisher:"Book Farm", category:"Thriller", accent:"", blurb:"A Book Farm title by Niaz Mehedi, lying flat across the top of the shelf."},
+  {titleBn:"একেনবাবু সমগ্র ১", titleEn:"Ekenbabu Samagra, Vol. 1", authorBn:"সুজন দাশগুপ্ত", authorEn:"Sujan Dasgupta", publisher:"The Cafe Table", category:"Detective", accent:"", blurb:"The first omnibus of Ekenbabu — Sujan Dasgupta's deceptively bumbling Bengali detective, whose cases run between Kolkata and New York. The series became a hit screen franchise."},
+  {titleBn:"একেনবাবু সমগ্র (দ্বিতীয় খণ্ড)", titleEn:"Ekenbabu Samagra, Vol. 2", authorBn:"সুজন দাশগুপ্ত", authorEn:"Sujan Dasgupta", publisher:"The Cafe Table", category:"Detective", accent:"", blurb:"Second collected volume of the Ekenbabu mysteries."},
+  {titleBn:"একেনবাবু সমগ্র (তৃতীয় খণ্ড)", titleEn:"Ekenbabu Samagra, Vol. 3", authorBn:"সুজন দাশগুপ্ত", authorEn:"Sujan Dasgupta", publisher:"The Cafe Table", category:"Detective", accent:"", blurb:"Third collected volume of the Ekenbabu mysteries."},
+  {titleBn:"একেনবাবু সমগ্র (চতুর্থ খণ্ড)", titleEn:"Ekenbabu Samagra, Vol. 4", authorBn:"সুজন দাশগুপ্ত", authorEn:"Sujan Dasgupta", publisher:"The Cafe Table", category:"Detective", accent:"", blurb:"Fourth collected volume of the Ekenbabu mysteries."},
+  {titleBn:"একেনবাবু সমগ্র (পঞ্চম খণ্ড)", titleEn:"Ekenbabu Samagra, Vol. 5", authorBn:"সুজন দাশগুপ্ত", authorEn:"Sujan Dasgupta", publisher:"The Cafe Table", category:"Detective", accent:"", blurb:"Fifth collected volume of the Ekenbabu mysteries."},
+  {titleBn:"নীবারসপ্তক", titleEn:"Nibarsaptak", authorBn:"কৌশিক মজুমদার", authorEn:"Kaushik Majumdar", publisher:"Book Farm", category:"Thriller", accent:"", blurb:"By Kaushik Majumdar, a writer known for excavating old Calcutta — its archives, its crimes and its ghosts."},
+  {titleBn:"অগ্নিনিরয়", titleEn:"Agninirayo", authorBn:"কৌশিক মজুমদার", authorEn:"Kaushik Majumdar", publisher:"Book Farm", category:"Thriller", accent:"", blurb:"A Kaushik Majumdar novel, its cover set on an aged map."},
+  {titleBn:"সূর্যতামসী", titleEn:"Suryatamasi", authorBn:"কৌশিক মজুমদার", authorEn:"Kaushik Majumdar", publisher:"Book Farm", category:"Thriller", accent:"", blurb:"A Kaushik Majumdar novel from Book Farm."},
+  {titleBn:"আতঙ্ক সমগ্র", titleEn:"Atanka Samagra", authorBn:"কৌশিক মজুমদার", authorEn:"Kaushik Majumdar", publisher:"Book Farm", category:"Anthology", accent:"", blurb:"A collected volume of horror and terror writing assembled by Kaushik Majumdar."},
+  {titleBn:"কলকাতার রাত্রি রহস্য", titleEn:"Kolkatar Ratri Rahasya", authorBn:"হেমেন্দ্রকুমার রায়", authorEn:"Hemendrakumar Ray", publisher:"Book Farm", category:"Thriller", accent:"", blurb:"Hemendrakumar Ray's mysteries of Calcutta by night."},
+  {titleBn:"আবার আঁধার", titleEn:"Abar Andhar", authorBn:"কৌশিক মজুমদার", authorEn:"Kaushik Majumdar", publisher:"Book Farm", category:"Thriller", accent:"", blurb:"Sequel volume to Andhar Akhyan, by Kaushik Majumdar."},
+  {titleBn:"ডিটেকটিভ তারিণীচরণ", titleEn:"Detective Tarinicharan", authorBn:"কৌশিক মজুমদার", authorEn:"Kaushik Majumdar", publisher:"Book Farm", category:"Detective", accent:"", blurb:"Kaushik Majumdar's detective Tarinicharan, set in the Calcutta of an earlier century."},
+  {titleBn:"ধন্য কলকেতা সহর", titleEn:"Dhanya Kolketa Sahar", authorBn:"কৌশিক মজুমদার", authorEn:"Kaushik Majumdar", publisher:"Akharkatha", category:"Literature", accent:"", blurb:"A portrait of old Calcutta by Kaushik Majumdar, its title borrowed from the city's own antique spelling."},
+  {titleBn:"আঁধার আখ্যান", titleEn:"Andhar Akhyan", authorBn:"কৌশিক মজুমদার", authorEn:"Kaushik Majumdar", publisher:"Book Farm", category:"Thriller", accent:"", blurb:"Dark tales collected by Kaushik Majumdar."},
+  {titleBn:"তোপসের নোটবুক", titleEn:"Topshe-r Notebook", authorBn:"কৌশিক মজুমদার", authorEn:"Kaushik Majumdar", publisher:"Book Farm", category:"Detective", accent:"", blurb:"Written as the notebook of Topshe, Feluda's cousin and chronicler — an affectionate companion piece to Satyajit Ray's stories."},
+  {titleBn:"রহস্য সন্ধানী দময়ন্তী সমগ্র ১", titleEn:"Rahasya Sandhani Damayanti Samagra, Vol. 1", authorBn:"মনোজ সেন", authorEn:"Manoj Sen", publisher:"Book Farm", category:"Detective", accent:"", blurb:"Damayanti is a history professor with a gift for unravelling crime, helping her engineer husband's friend Shiben of the Kolkata detective department. She carries no gun and is no professional — the stories first appeared in Romanch magazine in 1974, and Book Farm has been collecting them across volumes."},
+  {titleBn:"রহস্য সন্ধানী দময়ন্তী সমগ্র ২", titleEn:"Rahasya Sandhani Damayanti Samagra, Vol. 2", authorBn:"মনোজ সেন", authorEn:"Manoj Sen", publisher:"Book Farm", category:"Detective", accent:"", blurb:"Five Damayanti novels, including Paap, Andha Tamas and Nilkantha."},
+  {titleBn:"রহস্য সন্ধানী দময়ন্তী সমগ্র ৩", titleEn:"Rahasya Sandhani Damayanti Samagra, Vol. 3", authorBn:"মনোজ সেন", authorEn:"Manoj Sen", publisher:"Book Farm", category:"Detective", accent:"", blurb:"Nine Damayanti cases in the third collected volume."},
+  {titleBn:"রহস্য সন্ধানী দময়ন্তী সমগ্র ৪", titleEn:"Rahasya Sandhani Damayanti Samagra, Vol. 4", authorBn:"মনোজ সেন", authorEn:"Manoj Sen", publisher:"Book Farm", category:"Detective", accent:"", blurb:"Six more Damayanti stories, including Hanyate and Prem."},
+  {titleBn:"রহস্য সন্ধানী দময়ন্তী সমগ্র ৫", titleEn:"Rahasya Sandhani Damayanti Samagra, Vol. 5", authorBn:"মনোজ সেন", authorEn:"Manoj Sen", publisher:"Book Farm", category:"Detective", accent:"", blurb:"Fifth and latest collected volume of the Damayanti mysteries."},
+  {titleBn:"৫ × ৫ = পঁচিশ — পাঁচ মিশেলি সাহিত্য সংকলন", titleEn:"5 × 5 = Pochish", authorBn:"মনোজ সেন", authorEn:"Manoj Sen", publisher:"Book Farm", category:"Anthology", accent:"", blurb:"A mixed literary anthology by Manoj Sen — twenty-five pieces across five kinds of writing."},
+  {titleBn:"মরলোত্তম", titleEn:"Morlottam", authorBn:"সাদাত হোসাইন", authorEn:"Sadat Hossain", publisher:"—", category:"Literature", accent:"", blurb:"By Sadat Hossain, one of the most widely read contemporary novelists from Bangladesh."},
+
+  /* -------- sixth shelf: Sayak Aman, Tridibkumar, Himadrikishor, Adhisha, Prochet -------- */
+  {titleBn:"সেরা ৪৫", titleEn:"Sera 45", authorBn:"সায়ক আমান", authorEn:"Sayak Aman", publisher:"—", category:"Anthology", accent:"", blurb:"Forty-five selected stories by Sayak Aman."},
+  {titleBn:"কাকতাড়ুয়া", titleEn:"Kaktarua", authorBn:"সায়ক আমান", authorEn:"Sayak Aman", publisher:"—", category:"Thriller", accent:"", blurb:"'Scarecrow' — a novel by Sayak Aman."},
+  {titleBn:"জগুমামা রহস্য সমগ্র ১", titleEn:"Jagumama Rahasya Samagra, Vol. 1", authorBn:"ত্রিদিবকুমার চট্টোপাধ্যায়", authorEn:"Tridibkumar Chattopadhyay", publisher:"Patra Bharti", category:"Detective", accent:"", blurb:"First collected volume of the Jagumama mysteries by Tridibkumar Chattopadhyay."},
+  {titleBn:"জগুমামা রহস্য সমগ্র ৩", titleEn:"Jagumama Rahasya Samagra, Vol. 3", authorBn:"ত্রিদিবকুমার চট্টোপাধ্যায়", authorEn:"Tridibkumar Chattopadhyay", publisher:"Patra Bharti", category:"Detective", accent:"", blurb:"Third collected volume of the Jagumama mysteries."},
+  {titleBn:"মৃত্যুকে আমি দেখেছি", titleEn:"Mrityuke Ami Dekhechhi", authorBn:"ত্রিদিবকুমার চট্টোপাধ্যায়", authorEn:"Tridibkumar Chattopadhyay", publisher:"Patra Bharti", category:"Thriller", accent:"", blurb:"'I have seen death' — by Tridibkumar Chattopadhyay."},
+  {titleBn:"গুহ্যরোগ্লিফের দেশে", titleEn:"Guhyaroglypher Deshe", authorBn:"অনির্বাণ ঘোষ", authorEn:"Anirban Ghosh", publisher:"—", category:"Thriller", accent:"", blurb:"An adventure into the land of hieroglyphs, by Anirban Ghosh."},
+  {titleBn:"হারানো সূর্যের খোঁজে", titleEn:"Harano Suryer Khonje", authorBn:"অনির্বাণ ঘোষ", authorEn:"Anirban Ghosh", publisher:"—", category:"Thriller", accent:"", blurb:"'In search of the lost sun' — by Anirban Ghosh."},
+  {titleBn:"কালকেতু সমগ্র", titleEn:"Kalketu Samagra", authorBn:"রূপক সাহা", authorEn:"Rupak Saha", publisher:"Deep Prakashan", category:"Detective", accent:"", blurb:"The collected Kalketu stories by Rupak Saha."},
+  {titleBn:"ঘটসুতলি", titleEn:"Ghatsutali", authorBn:"রূপক সাহা", authorEn:"Rupak Saha", publisher:"—", category:"Thriller", accent:"", blurb:"A Rupak Saha novel in a textured leather-look binding."},
+  {titleBn:"ভয় পেলেন অভয়চরণ", titleEn:"Bhoy Pelen Abhoycharan", authorBn:"বিনোদ ঘোষাল", authorEn:"Binod Ghoshal", publisher:"Patra Bharti", category:"Literature", accent:"", blurb:"'Abhoycharan took fright' — a wry title from Binod Ghoshal, an award-winning contemporary Bengali novelist and story writer."},
+  {titleBn:"রূপনগরের পিশাচিনী", titleEn:"Rupnagarer Pishachini", authorBn:"বিনোদ ঘোষাল", authorEn:"Binod Ghoshal", publisher:"—", category:"Thriller", accent:"", blurb:"'The witch of Rupnagar' — by Binod Ghoshal."},
+  {titleBn:"অ্যাডভেঞ্চার সমগ্র", titleEn:"Adventure Samagra", authorBn:"হিমাদ্রিকিশোর দাশগুপ্ত", authorEn:"Himadrikishor Dasgupta", publisher:"Lalmati", category:"Children's", accent:"", blurb:"The collected adventure writing of Himadrikishor Dasgupta."},
+  {titleBn:"কালো ঘড়ি — কিশোর গল্প সংকলন", titleEn:"Kalo Ghori — Kishor Golpo Sankalan", authorBn:"হিমাদ্রিকিশোর দাশগুপ্ত", authorEn:"Himadrikishor Dasgupta", publisher:"—", category:"Children's", accent:"", blurb:"'The black watch' — a collection of stories for young readers."},
+  {titleBn:"চন্দ্রভাগার চাঁদ", titleEn:"Chandrabhagar Chand", authorBn:"হিমাদ্রিকিশোর দাশগুপ্ত", authorEn:"Himadrikishor Dasgupta", publisher:"Patra Bharti", category:"Literature", accent:"", blurb:"'The moon over Chandrabhaga' — by Himadrikishor Dasgupta."},
+  {titleBn:"ফিরিঙ্গি ঠগি", titleEn:"Phiringi Thagi", authorBn:"হিমাদ্রিকিশোর দাশগুপ্ত", authorEn:"Himadrikishor Dasgupta", publisher:"Patra Bharti", category:"Thriller", accent:"", blurb:"'The foreign thug' — drawing on the history of the thuggee cult."},
+  {titleBn:"খাজুরাহ সুন্দরী", titleEn:"Khajuraho Sundari", authorBn:"হিমাদ্রিকিশোর দাশগুপ্ত", authorEn:"Himadrikishor Dasgupta", publisher:"Patra Bharti", category:"Thriller", accent:"", blurb:"'The beauty of Khajuraho' — by Himadrikishor Dasgupta."},
+  {titleBn:"একদা এক পানশালাতে", titleEn:"Ekada Ek Panshalate", authorBn:"হিমাদ্রিকিশোর দাশগুপ্ত", authorEn:"Himadrikishor Dasgupta", publisher:"—", category:"Literature", accent:"", blurb:"'Once, in a tavern' — by Himadrikishor Dasgupta."},
+  {titleBn:"বিদ্যুৎলতা বটব্যাল : সংঘর্ষ", titleEn:"Bidyutlata Batabyal: Sangharsha", authorBn:"অধীশা সরকার", authorEn:"Adhisha Sarkar", publisher:"Bhasabinyas", category:"Literature", accent:"", blurb:"'Conflict' — part of Adhisha Sarkar's Bidyutlata Batabyal sequence."},
+  {titleBn:"বিদ্যুৎলতা বটব্যাল : আত্মপ্রকাশ", titleEn:"Bidyutlata Batabyal: Atmaprakash", authorBn:"অধীশা সরকার", authorEn:"Adhisha Sarkar", publisher:"Bhasabinyas", category:"Literature", accent:"", blurb:"'Self-revelation' — the companion volume in Adhisha Sarkar's Bidyutlata Batabyal sequence."},
+  {titleBn:"একটু পরে রোদ উঠবে", titleEn:"Ektu Pore Rod Uthbe", authorBn:"প্রচেত গুপ্ত", authorEn:"Prochet Gupta", publisher:"Patra Bharti", category:"Literature", accent:"", blurb:"'The sun will come out soon' — by Prochet Gupta, known for warm, observant fiction about middle-class Bengali life."},
+  {titleBn:"হত্যাকাণ্ডের আগে ও পরে", titleEn:"Hatyakander Age O Pore", authorBn:"প্রচেত গুপ্ত", authorEn:"Prochet Gupta", publisher:"—", category:"Thriller", accent:"", blurb:"'Before and after the murder' — by Prochet Gupta."},
+  {titleBn:"চুপিচুপি বলছি", titleEn:"Chupichupi Bolchhi", authorBn:"প্রচেত গুপ্ত", authorEn:"Prochet Gupta", publisher:"—", category:"Literature", accent:"", blurb:"'Saying it quietly' — by Prochet Gupta."},
+  {titleBn:"পেত্নি সমগ্র — মহিলা ভূতের গল্প সংকলন", titleEn:"Petni Samagra — women ghost stories", authorBn:"—", authorEn:"(anthology — editor not shown on spine)", publisher:"Book Farm", category:"Anthology", accent:"", blurb:"An anthology devoted entirely to the petni — the female ghost of Bengali folklore."},
+
+  /* -------- seventh shelf: Shirshendu, Bibhutibhushan, contemporary thrillers -------- */
+  {titleBn:"কেউ কেউ কথা রাখে", titleEn:"Keu Keu Katha Rakhe", authorBn:"মোহাম্মদ নাজিম উদ্দিন", authorEn:"Mohammad Nazim Uddin", publisher:"Batighar", category:"Thriller", accent:"", blurb:"By Mohammad Nazim Uddin, the Bangladeshi thriller writer best known for the Rabindranath series."},
+  {titleBn:"রবীন্দ্রনাথ এখানে কখনও আসেননি", titleEn:"Rabindranath Ekhane Kokhono Asenni", authorBn:"মোহাম্মদ নাজিম উদ্দিন", authorEn:"Mohammad Nazim Uddin", publisher:"Batighar", category:"Thriller", accent:"", blurb:"'Rabindranath never came here' — the cult mystery that made Nazim Uddin's name, later adapted for screen."},
+  {titleBn:"রবীন্দ্রনাথ এখানে কখনও খেতে আসেননি", titleEn:"Rabindranath Ekhane Kokhono Khete Asenni", authorBn:"মোহাম্মদ নাজিম উদ্দিন", authorEn:"Mohammad Nazim Uddin", publisher:"Batighar", category:"Thriller", accent:"", blurb:"The sequel — 'Rabindranath never came here to eat'."},
+  {titleBn:"এককুড়ি একডজন", titleEn:"Ekkuri Ekdojon", authorBn:"শীর্ষেন্দু মুখোপাধ্যায়", authorEn:"Shirshendu Mukhopadhyay", publisher:"Patra Bharti", category:"Anthology", accent:"", blurb:"'A score and a dozen' — thirty-two stories by Shirshendu Mukhopadhyay."},
+  {titleBn:"ঋণ", titleEn:"Rin", authorBn:"শীর্ষেন্দু মুখোপাধ্যায়", authorEn:"Shirshendu Mukhopadhyay", publisher:"—", category:"Literature", accent:"", blurb:"'Debt' — a novel by Shirshendu Mukhopadhyay."},
+  {titleBn:"নীলু হাজরার হত্যারহস্য", titleEn:"Nilu Hajrar Hatyarahasya", authorBn:"শীর্ষেন্দু মুখোপাধ্যায়", authorEn:"Shirshendu Mukhopadhyay", publisher:"—", category:"Detective", accent:"", blurb:"'The murder mystery of Nilu Hajra' — Shirshendu in detective mode."},
+  {titleBn:"কুঞ্চন লামার করোটি", titleEn:"Kunchan Lamar Koroti", authorBn:"শ্যামল ঘোষ", authorEn:"Shyamal Ghosh", publisher:"—", category:"Thriller", accent:"", blurb:"'The skull of Kunchan Lama' — by Shyamal Ghosh."},
+  {titleBn:"তোমার ঘুমের সুযোগ নিয়ে", titleEn:"Tomar Ghumer Sujog Niye", authorBn:"সৌভিক দাস", authorEn:"Souvik Das", publisher:"—", category:"Thriller", accent:"", blurb:"'Taking advantage of your sleep' — a contemporary Bengali thriller."},
+  {titleBn:"প্রাণনাথ হেও তুমি", titleEn:"Prannath Heo Tumi", authorBn:"প্রীতম বসু", authorEn:"Pritam Basu", publisher:"—", category:"Literature", accent:"", blurb:"By Pritam Basu, known for historical fiction rooted in Bengali language and prosody."},
+  {titleBn:"আদর্শ হিন্দু হোটেল", titleEn:"Adarsha Hindu Hotel", authorBn:"বিভূতিভূষণ বন্দ্যোপাধ্যায়", authorEn:"Bibhutibhushan Bandyopadhyay", publisher:"—", category:"Literature", accent:"", blurb:"A classic novel about Hazari Thakur, a cook in a small-town eatery who dreams of running his own hotel — one of Bibhutibhushan's warmest books."},
+  {titleBn:"আরণ্যক", titleEn:"Aranyak", authorBn:"বিভূতিভূষণ বন্দ্যোপাধ্যায়", authorEn:"Bibhutibhushan Bandyopadhyay", publisher:"—", category:"Literature", accent:"", blurb:"'Of the forest' — a young estate manager's account of the vanishing wilderness of Bihar, and among the finest nature writing in Bengali."},
+  {titleBn:"অলাতচক্র", titleEn:"Alatchakra", authorBn:"তারাদাস বন্দ্যোপাধ্যায়", authorEn:"Taradas Bandyopadhyay", publisher:"—", category:"Literature", accent:"", blurb:"By Taradas Bandyopadhyay, son of Bibhutibhushan and a novelist in his own right."},
+  {titleBn:"আলিনগরের গোলকধাঁধা", titleEn:"Alinagarer Golokdhandha", authorBn:"সৌগত বসু", authorEn:"Sougata Basu", publisher:"—", category:"Thriller", accent:"", blurb:"'The labyrinth of Alinagar' — Alinagar being the name Siraj-ud-Daulah gave Calcutta after taking the city."},
+  {titleBn:"চতুষ্কোণ", titleEn:"Chatushkon", authorBn:"রক্তিম লস্কর", authorEn:"Raktim Laskar", publisher:"—", category:"Thriller", accent:"", blurb:"'Quadrangle' — by Raktim Laskar."},
+  {titleBn:"মানুষের মাংসের রেস্তোরাঁ", titleEn:"Manusher Mangsher Restora", authorBn:"মোজাফ্‌ফর হোসেন", authorEn:"Mozaffar Hossain", publisher:"—", category:"Literature", accent:"", blurb:"'The restaurant of human flesh' — a provocatively titled collection by Mozaffar Hossain."},
+  {titleBn:"বংপেন ৭৫", titleEn:"Bongpen 75", authorBn:"তন্ময় মুখার্জি", authorEn:"Tanmoy Mukherjee", publisher:"—", category:"Literature", accent:"", blurb:"From Bongpen, the much-followed Bengali blog turned book — wry, contemporary, very Kolkata."},
+  {titleBn:"হাসতে হাসতে খুন", titleEn:"Haste Haste Khun", authorBn:"পূর্ণেন্দু পত্রী", authorEn:"Purnendu Patri", publisher:"—", category:"Detective", accent:"", blurb:"'Murder, laughing' — by Purnendu Patri, poet, illustrator and filmmaker."},
+  {titleBn:"জাম্বো দি জিনিয়াস", titleEn:"Jumbo the Genius", authorBn:"পূর্ণেন্দু পত্রী", authorEn:"Purnendu Patri", publisher:"—", category:"Children's", accent:"", blurb:"A children's adventure by Purnendu Patri."},
+  {titleBn:"প্রফেসর সোম", titleEn:"Professor Som", authorBn:"কৌশিক সামন্ত", authorEn:"Kaushik Samanta", publisher:"—", category:"Detective", accent:"", blurb:"First outing for Kaushik Samanta's Professor Som."},
+  {titleBn:"প্রফেসর সোম আবার!", titleEn:"Professor Som Abar!", authorBn:"কৌশিক সামন্ত", authorEn:"Kaushik Samanta", publisher:"—", category:"Detective", accent:"", blurb:"'Professor Som again!' — the sequel."},
+  {titleBn:"শামুকখোল", titleEn:"Shamukkhol", authorBn:"তিলোত্তমা মজুমদার", authorEn:"Tilottama Majumdar", publisher:"—", category:"Literature", accent:"", blurb:"By Tilottama Majumdar, an Ananda Puraskar–winning novelist; the title names the openbill stork."},
+  {titleBn:"মহাভারত (প্রথম খণ্ড)", titleEn:"Mahabharata, Vol. 1", authorBn:"শুদ্ধসত্ত্ব", authorEn:"Shuddhasattwa", publisher:"—", category:"Literature", accent:"", blurb:"A retelling of the Mahabharata, first volume."},
+  {titleBn:"লাশতালাশ", titleEn:"Lashtalash", authorBn:"অনীশ দেব", authorEn:"Anish Deb", publisher:"Patra Bharti", category:"Thriller", accent:"", blurb:"By Anish Deb, a prolific writer of Bengali science fiction and thrillers."},
+  {titleBn:"তেইশ ঘণ্টা ষাট মিনিট", titleEn:"Teish Ghanta Shat Minute", authorBn:"অনীশ দেব", authorEn:"Anish Deb", publisher:"Patra Bharti", category:"Thriller", accent:"", blurb:"'Twenty-three hours, sixty minutes' — a taut premise from Anish Deb."},
+  {titleBn:"কলকাতা নুয়া", titleEn:"Kolkata Noir", authorBn:"রাজর্ষি দাশ ভৌমিক", authorEn:"Rajarshi Das Bhowmik", publisher:"—", category:"Thriller", accent:"", blurb:"Noir transplanted to Kolkata, by Rajarshi Das Bhowmik."},
+  {titleBn:"অজ্ঞাতপরিচয় ব্যক্তির দেহাবশেষ উদ্ধার", titleEn:"Agyatoporichoy Byaktir Dehabashesh Uddhar", authorBn:"রাজর্ষি দাশ ভৌমিক", authorEn:"Rajarshi Das Bhowmik", publisher:"—", category:"Thriller", accent:"", blurb:"'Remains of an unidentified person recovered' — a title lifted straight from a police report."},
+  {titleBn:"বর্ষণ অধিক", titleEn:"Barshan Adhik", authorBn:"সৌমিত্র বিশ্বাস", authorEn:"Soumitra Biswas", publisher:"—", category:"Literature", accent:"", blurb:"By Soumitra Biswas."},
+  {titleBn:"অদ্ভুত বাড়ির রহস্য", titleEn:"Adbhut Barir Rahasya", authorBn:"বিনোদ ঘোষাল", authorEn:"Binod Ghoshal", publisher:"Dev Sahitya Kutir", category:"Children's", accent:"", blurb:"'The mystery of the strange house' — a children's mystery by Binod Ghoshal."},
+  {titleBn:"অর্কিড রহস্য", titleEn:"Orchid Rahasya", authorBn:"সৈকত মুখোপাধ্যায়", authorEn:"Saikat Mukhopadhyay", publisher:"—", category:"Detective", accent:"", blurb:"'The orchid mystery' — by Saikat Mukhopadhyay."},
+  {titleBn:"ইন্দুবালা ভাতের হোটেল", titleEn:"Indubala Bhater Hotel", authorBn:"কল্লোল লাহিড়ী", authorEn:"Kallol Lahiri", publisher:"—", category:"Literature", accent:"", blurb:"Kallol Lahiri's much-loved novel of a Partition-displaced woman who runs a small eating house in Kolkata, each chapter built around a dish and a memory. Adapted into a popular web series."},
+
+  /* -------- eighth shelf: Kiriti omnibus, Kakababu, Narayan Sanyal, Suchitra Bhattacharya -------- */
+  {titleBn:"কিরীটী অমনিবাস ১", titleEn:"Kiriti Omnibus, Vol. 1", authorBn:"নীহাররঞ্জন গুপ্ত", authorEn:"Nihar Ranjan Gupta", publisher:"Mitra & Ghosh", category:"Detective", accent:"", blurb:"Kiriti Roy, the elegant Calcutta detective created by Nihar Ranjan Gupta — a doctor by profession who wrote over sixty Kiriti novels. This is the first omnibus."},
+  {titleBn:"কিরীটী অমনিবাস ২", titleEn:"Kiriti Omnibus, Vol. 2", authorBn:"নীহাররঞ্জন গুপ্ত", authorEn:"Nihar Ranjan Gupta", publisher:"Mitra & Ghosh", category:"Detective", accent:"", blurb:"Second Kiriti omnibus."},
+  {titleBn:"কিরীটী অমনিবাস ৪", titleEn:"Kiriti Omnibus, Vol. 4", authorBn:"নীহাররঞ্জন গুপ্ত", authorEn:"Nihar Ranjan Gupta", publisher:"Mitra & Ghosh", category:"Detective", accent:"", blurb:"Fourth Kiriti omnibus."},
+  {titleBn:"কিরীটী অমনিবাস ৫", titleEn:"Kiriti Omnibus, Vol. 5", authorBn:"নীহাররঞ্জন গুপ্ত", authorEn:"Nihar Ranjan Gupta", publisher:"Mitra & Ghosh", category:"Detective", accent:"", blurb:"Fifth Kiriti omnibus."},
+  {titleBn:"কিরীটী অমনিবাস ৭", titleEn:"Kiriti Omnibus, Vol. 7", authorBn:"নীহাররঞ্জন গুপ্ত", authorEn:"Nihar Ranjan Gupta", publisher:"Mitra & Ghosh", category:"Detective", accent:"", blurb:"Seventh Kiriti omnibus."},
+  {titleBn:"কিরীটী অমনিবাস ৮", titleEn:"Kiriti Omnibus, Vol. 8", authorBn:"নীহাররঞ্জন গুপ্ত", authorEn:"Nihar Ranjan Gupta", publisher:"Mitra & Ghosh", category:"Detective", accent:"", blurb:"Eighth Kiriti omnibus."},
+  {titleBn:"কিরীটী অমনিবাস ১৩", titleEn:"Kiriti Omnibus, Vol. 13", authorBn:"নীহাররঞ্জন গুপ্ত", authorEn:"Nihar Ranjan Gupta", publisher:"Mitra & Ghosh", category:"Detective", accent:"", blurb:"Thirteenth Kiriti omnibus."},
+  {titleBn:"কিরীটী অমনিবাস ১৪", titleEn:"Kiriti Omnibus, Vol. 14", authorBn:"নীহাররঞ্জন গুপ্ত", authorEn:"Nihar Ranjan Gupta", publisher:"Mitra & Ghosh", category:"Detective", accent:"", blurb:"Fourteenth Kiriti omnibus."},
+  {titleBn:"কাকাবাবু সমগ্র ১", titleEn:"Kakababu Samagra, Vol. 1", authorBn:"সুনীল গঙ্গোপাধ্যায়", authorEn:"Sunil Gangopadhyay", publisher:"Ananda Publishers", category:"Children's", accent:"", blurb:"Raja Roychowdhury — Kakababu — the one-legged former archaeologist who solves mysteries with his nephew Santu. Sunil Gangopadhyay's most beloved creation for young readers."},
+  {titleBn:"কাকাবাবু সমগ্র ২", titleEn:"Kakababu Samagra, Vol. 2", authorBn:"সুনীল গঙ্গোপাধ্যায়", authorEn:"Sunil Gangopadhyay", publisher:"Ananda Publishers", category:"Children's", accent:"", blurb:"Second collected volume of the Kakababu adventures."},
+  {titleBn:"কাকাবাবু সমগ্র ৩", titleEn:"Kakababu Samagra, Vol. 3", authorBn:"সুনীল গঙ্গোপাধ্যায়", authorEn:"Sunil Gangopadhyay", publisher:"Ananda Publishers", category:"Children's", accent:"", blurb:"Third collected volume of the Kakababu adventures."},
+  {titleBn:"অর্জুন", titleEn:"Arjun", authorBn:"সুনীল গঙ্গোপাধ্যায়", authorEn:"Sunil Gangopadhyay", publisher:"—", category:"Literature", accent:"", blurb:"Sunil Gangopadhyay's novel Arjun, set among refugee settlements on the edge of Calcutta."},
+  {titleBn:"হুঁকা-কাশি সমগ্র", titleEn:"Hunka-Kashi Samagra", authorBn:"মনোরঞ্জন ভট্টাচার্য", authorEn:"Manoranjan Bhattacharya", publisher:"Bhasa", category:"Detective", accent:"", blurb:"The collected Hunka-Kashi stories by Manoranjan Bhattacharya."},
+  {titleBn:"কাঁটায়-কাঁটায় ১", titleEn:"Kantay-Kantay, Vol. 1", authorBn:"নারায়ণ সান্যাল", authorEn:"Narayan Sanyal", publisher:"Dey's Publishing", category:"Detective", accent:"", blurb:"Narayan Sanyal's crime series — the author was a civil engineer who wrote across detective fiction, art history and social novels."},
+  {titleBn:"কাঁটায়-কাঁটায় ২", titleEn:"Kantay-Kantay, Vol. 2", authorBn:"নারায়ণ সান্যাল", authorEn:"Narayan Sanyal", publisher:"Dey\'s Publishing", category:"Detective", accent:"", blurb:"Second volume of Kantay-Kantay."},
+  {titleBn:"কাঁটায়-কাঁটায় ৩", titleEn:"Kantay-Kantay, Vol. 3", authorBn:"নারায়ণ সান্যাল", authorEn:"Narayan Sanyal", publisher:"Dey\'s Publishing", category:"Detective", accent:"", blurb:"Third volume of Kantay-Kantay."},
+  {titleBn:"বিশ্বাসঘাতক", titleEn:"Bishwasghatak", authorBn:"নারায়ণ সান্যাল", authorEn:"Narayan Sanyal", publisher:"Dey\'s Publishing", category:"Literature", accent:"", blurb:"'The traitor' — one of Narayan Sanyal's best-known novels."},
+  {titleBn:"কাউরীবুড়ির মন্দির", titleEn:"Kauriburir Mandir", authorBn:"অভীক সরকার", authorEn:"Abhik Sarkar", publisher:"—", category:"Thriller", accent:"", blurb:"'The temple of Kauri-buri' — by Abhik Sarkar, who writes horror steeped in tantra and rural Bengali folklore."},
+  {titleBn:"পেতবখু", titleEn:"Petbokhu", authorBn:"অভীক সরকার", authorEn:"Abhik Sarkar", publisher:"—", category:"Thriller", accent:"", blurb:"A horror title by Abhik Sarkar."},
+  {titleBn:"ডাইনিবুড়ি ও অন্যান্য", titleEn:"Dainiburi O Onyanyo", authorBn:"অভীক সরকার", authorEn:"Abhik Sarkar", publisher:"—", category:"Thriller", accent:"", blurb:"'The old witch and other stories' — Abhik Sarkar's collected horror."},
+  {titleBn:"মিতিনমাসি সমগ্র ১", titleEn:"Mitinmasi Samagra, Vol. 1", authorBn:"সুচিত্রা ভট্টাচার্য", authorEn:"Suchitra Bhattacharya", publisher:"Ananda Publishers", category:"Detective", accent:"", blurb:"Pragyaparamita Mukherjee — Mitin-masi — is one of Bengali fiction's few women detectives, a homemaker and investigator who solves cases with her niece Tupur. Created by Suchitra Bhattacharya."},
+  {titleBn:"তিন মিতিন", titleEn:"Teen Mitin", authorBn:"সুচিত্রা ভট্টাচার্য", authorEn:"Suchitra Bhattacharya", publisher:"Ananda Publishers", category:"Detective", accent:"", blurb:"Three Mitin-masi cases in one volume."},
+  {titleBn:"সুখ দুঃখ", titleEn:"Sukh Dukkho", authorBn:"সুচিত্রা ভট্টাচার্য", authorEn:"Suchitra Bhattacharya", publisher:"—", category:"Literature", accent:"", blurb:"'Joy and sorrow' — by Suchitra Bhattacharya, a novelist known for unflinching portraits of urban Bengali women's lives."},
+  {titleBn:"মেঘের পরে মেঘ", titleEn:"Megher Pore Megh", authorBn:"সুচিত্রা ভট্টাচার্য", authorEn:"Suchitra Bhattacharya", publisher:"—", category:"Literature", accent:"", blurb:"'Cloud after cloud' — a Suchitra Bhattacharya novel."},
+  {titleBn:"ভাঙনকাল", titleEn:"Bhangankal", authorBn:"সুচিত্রা ভট্টাচার্য", authorEn:"Suchitra Bhattacharya", publisher:"—", category:"Literature", accent:"", blurb:"'A time of breaking' — by Suchitra Bhattacharya."},
+  {titleBn:"একের পিঠে দুই", titleEn:"Eker Pithe Dui", authorBn:"সত্যজিৎ রায়", authorEn:"Satyajit Ray", publisher:"Ananda Publishers", category:"Literature", accent:"", blurb:"A Satyajit Ray story collection."},
+  {titleBn:"রবার্টসনের রুবি", titleEn:"Robertsoner Ruby", authorBn:"সত্যজিৎ রায়", authorEn:"Satyajit Ray", publisher:"Ananda Publishers", category:"Detective", accent:"", blurb:"'Robertson's Ruby' — a late Feluda adventure."},
+  {titleBn:"তারিণীখুড়োর কীর্তিকলাপ", titleEn:"Tarinikhuror Kirtikalap", authorBn:"সত্যজিৎ রায়", authorEn:"Satyajit Ray", publisher:"Ananda Publishers", category:"Literature", accent:"", blurb:"The tall tales of Tarini-khuro, Ray's inexhaustible raconteur."},
+  {titleBn:"পিকুর ডায়রি ও অন্যান্য", titleEn:"Pikoor Diary O Onyanyo", authorBn:"সত্যজিৎ রায়", authorEn:"Satyajit Ray", publisher:"Ananda Publishers", category:"Literature", accent:"", blurb:"Includes Pikoo's Diary, which Ray also filmed as a short."},
+  {titleBn:"ফেলুদা এন্ড কোং", titleEn:"Feluda & Co.", authorBn:"সত্যজিৎ রায়", authorEn:"Satyajit Ray", publisher:"Ananda Publishers", category:"Detective", accent:"", blurb:"A Feluda collection."},
+  {titleBn:"গোপাল ভাঁড় রহস্য", titleEn:"Gopal Bhanr Rahasya", authorBn:"—", authorEn:"(Book Farm)", publisher:"Book Farm", category:"Literature", accent:"", blurb:"A Book Farm volume investigating the Gopal Bhar legend."},
+];
+const CATEGORIES = ["Detective","Sci-Fi","Children's","Anthology","Thriller","Literature"];
+
+/* ---------- phonetic English → Bengali ---------- */
+const VOWELS = [
+  ['oi','ঐ','ৈ'],['ou','ঔ','ৌ'],['ee','ঈ','ী'],['oo','ঊ','ূ'],
+  ['ii','ঈ','ী'],['uu','ঊ','ূ'],['rri','ঋ','ৃ'],['aa','আ','া'],
+  ['a','অ',''],['i','ই','ি'],['u','উ','ু'],['e','এ','ে'],['o','ও','ো'],
+];
+const CONSONANTS = [
+  ['kh','খ'],['gh','ঘ'],['ng','ঙ'],['chh','ছ'],['ch','চ'],['jh','ঝ'],
+  ['Th','ঠ'],['th','থ'],['Dh','ঢ'],['dh','ধ'],['ph','ফ'],['bh','ভ'],
+  ['sh','শ'],['Rh','ঢ়'],['T','ট'],['D','ড'],['N','ণ'],['R','ড়'],['S','ষ'],
+  ['k','ক'],['g','গ'],['c','চ'],['j','জ'],['t','ত'],['d','দ'],['n','ন'],
+  ['p','প'],['f','ফ'],['b','ব'],['m','ম'],['z','য'],['y','য়'],['r','র'],
+  ['l','ল'],['s','স'],['h','হ'],['w','ও'],['v','ভ'],['x','ক্স'],
+];
+function wordToBengali(word){
+  if(!/^[A-Za-z]+$/.test(word)) return word;
+  let i=0, phones=[];
+  while(i<word.length){
+    let found=false;
+    for(const [pat,ch] of CONSONANTS){
+      if(word.substr(i,pat.length)===pat){ phones.push({t:'c',ch}); i+=pat.length; found=true; break; }
+    }
+    if(found) continue;
+    const lower = word.slice(i).toLowerCase();
+    for(const [pat,ind,kar] of VOWELS){
+      if(lower.substr(0,pat.length)===pat){ phones.push({t:'v',ind,kar}); i+=pat.length; found=true; break; }
+    }
+    if(found) continue;
+    phones.push({t:'?',ch:word[i]}); i++;
+  }
+  let out='';
+  for(let idx=0; idx<phones.length; idx++){
+    const p = phones[idx], next = phones[idx+1];
+    if(p.t==='c'){
+      if(next && next.t==='v'){ out += p.ch + next.kar; idx++; }
+      else if(next && next.t==='c'){ out += p.ch + '\u09CD'; }
+      else out += p.ch;
+    } else if(p.t==='v'){
+      const prev = phones[idx-1];
+      if(!prev || prev.t!=='c') out += p.ind;
+    } else out += p.ch;
+  }
+  return out;
+}
+function transliterateText(s){ return s.split(/(\s+)/).map(wordToBengali).join(''); }
+function attachPhonetic(el){
+  el.addEventListener('keyup', (e) => {
+    if(e.key === ' '){
+      const parts = el.value.slice(0,-1).split(' ');
+      const last = parts[parts.length-1];
+      if(/^[A-Za-z]+$/.test(last) && last.length){
+        parts[parts.length-1] = wordToBengali(last);
+        el.value = parts.join(' ') + ' ';
+      }
+    }
+  });
+  el.addEventListener('blur', () => { el.value = transliterateText(el.value); });
+}
+
+/* ---------- render ---------- */
+const railEl = document.getElementById('rail');
+const gridEl = document.getElementById('grid');
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+const DARK_ACCENTS = ['var(--ink)','var(--oxblood)','var(--indigo)','var(--brown)','#3b3530','var(--red)'];
+/* map legacy accent tokens onto the new palette */
+const CAT_COLOR = {
+  "Detective":"#6F809B",
+  "Thriller":"#B4798A",
+  "Literature":"#8B9E8C",
+  "Children's":"#C29A5B",
+  "Sci-Fi":"#7C5A76",
+  "Anthology":"#B08272",
+};
+const ACCENT_MAP = {};
+function accentOf(b){ return CAT_COLOR[b.category] || '#6F809B'; }
+
+function isLight(hex){
+  if(!/^#/.test(hex)) return false;
+  const n = parseInt(hex.slice(1),16);
+  const r=(n>>16)&255, g=(n>>8)&255, bl=n&255;
+  return (0.299*r + 0.587*g + 0.114*bl) > 165;
+}
+
+const HEIGHTS = [188,214,172,232,196,206,180,224];
+
+function renderRail(){
+  railEl.innerHTML = '';
+  books.forEach((b,i) => {
+    const c = accentOf(b);
+    const sp = document.createElement('button');
+    sp.className = 'spine';
+    sp.style.background = c;
+    sp.style.filter = 'brightness(' + (0.86 + (i % 3) * 0.12) + ')';
+    sp.style.height = HEIGHTS[i % HEIGHTS.length] + 'px';
+    sp.title = b.titleBn + ' — ' + b.authorEn;
+    sp.setAttribute('aria-label', b.titleBn + ' — ' + b.authorEn);
+    sp.innerHTML = `<span style="color:${isLight(c) ? '#12211B' : '#EDE8DF'}">${esc(b.titleBn)}</span>`;
+    sp.addEventListener('click', () => openDetail(i));
+    railEl.appendChild(sp);
+  });
+}
+
+function cardView(b,i){
+  return `
+    <div class="card-head">
+      <div class="cat">${esc(b.category)}</div>
+      <button class="lend-btn${b.lentTo ? ' on' : ''}">${b.lentTo ? '↩ Returned' : '↗ Lend'}</button>
+      <button class="edit-btn">✎ Edit</button>
+    </div>
+    <button class="title-btn">
+      <span class="t-bn">${esc(b.titleBn)}</span>
+      <span class="t-en">${esc(b.titleEn)}</span>
+    </button>
+    <div class="byline">${esc(b.authorBn)}</div>
+    <div class="byline-en">${esc(b.authorEn)}</div>
+    ${b.lentTo ? `<div class="lent-flag">↗ With ${esc(b.lentTo)}${b.lentOn ? ' · since ' + esc(b.lentOn) : ''}</div>` : ''}
+    <div class="meta">
+      <span>${esc(b.publisher)}</span>
+      <button class="detail-hint">Details →</button>
+    </div>`;
+}
+
+function cardEdit(b){
+  const opts = CATEGORIES.map(c => `<option value="${c}" ${c===b.category?'selected':''}>${c}</option>`).join('');
+  return `
+    <div class="cat">Editing</div>
+    <div class="edit-form">
+      <label>বাংলা শিরোনাম · Bengali title <span class="translit-hint">phonetic</span></label>
+      <input class="bn-input f-title-bn" value="${esc(b.titleBn)}">
+      <label>English title</label>
+      <input class="f-title-en" value="${esc(b.titleEn)}">
+      <label>বাংলা লেখক · Bengali author <span class="translit-hint">phonetic</span></label>
+      <input class="bn-input f-author-bn" value="${esc(b.authorBn)}">
+      <label>English author</label>
+      <input class="f-author-en" value="${esc(b.authorEn)}">
+      <label>পরিচিতি · About</label>
+      <input class="f-blurb" value="${esc(b.blurb||'')}">
+      <label>Publisher</label>
+      <input class="f-publisher" value="${esc(b.publisher)}">
+      <label>ধার নিয়েছেন · Lent to <span class="translit-hint">blank = on the shelf</span></label>
+      <input class="f-lent" value="${esc(b.lentTo||'')}" placeholder="borrower's name">
+      <label>Date lent</label>
+      <input class="f-lent-on" type="date" value="${esc(b.lentOn||'')}">
+      <label>Shelf</label>
+      <select class="f-category">${opts}</select>
+      <div class="edit-actions">
+        <button class="save-btn">Save</button>
+        <button class="cancel-btn">Cancel</button>
+      </div>
+      <p class="edit-note">Type a Bengali name in Latin letters — "shirshendu" — and it converts when you hit space or leave the field. Changes stay in this browser only.</p>
+    </div>`;
+}
+
+function renderCard(i){
+  const b = books[i];
+  let card = document.getElementById('card-'+i);
+  if(!card){
+    card = document.createElement('div');
+    card.className = 'card';
+    card.id = 'card-'+i;
+    gridEl.appendChild(card);
+  }
+  card.style.setProperty('--accent', accentOf(b));
+  card.dataset.category = b.category;
+  card.dataset.lent = b.lentTo ? '1' : '0';
+  card.dataset.search = (b.titleBn+' '+b.titleEn+' '+b.authorBn+' '+b.authorEn+' '+(b.blurb||'')+' '+b.publisher+' '+(b.lentTo||'')).toLowerCase();
+  card.innerHTML = cardView(b,i);
+  card.classList.toggle('is-lent', !!b.lentTo);
+  card.querySelector('.edit-btn').addEventListener('click', () => enterEdit(i));
+  card.querySelector('.lend-btn').addEventListener('click', () => toggleLend(i));
+  card.querySelector('.title-btn').addEventListener('click', () => openDetail(i));
+  card.querySelector('.detail-hint').addEventListener('click', () => openDetail(i));
+}
+
+function enterEdit(i){
+  const card = document.getElementById('card-'+i);
+  card.innerHTML = cardEdit(books[i]);
+  attachPhonetic(card.querySelector('.f-title-bn'));
+  attachPhonetic(card.querySelector('.f-author-bn'));
+  card.querySelector('.save-btn').addEventListener('click', () => saveCard(i));
+  card.querySelector('.cancel-btn').addEventListener('click', () => renderCard(i));
+}
+
+function saveCard(i){
+  const card = document.getElementById('card-'+i), b = books[i];
+  b.titleBn   = transliterateText(card.querySelector('.f-title-bn').value.trim());
+  b.titleEn   = card.querySelector('.f-title-en').value.trim();
+  b.authorBn  = transliterateText(card.querySelector('.f-author-bn').value.trim());
+  b.authorEn  = card.querySelector('.f-author-en').value.trim();
+  b.blurb     = card.querySelector('.f-blurb').value.trim();
+  b.publisher = card.querySelector('.f-publisher').value.trim();
+  b.lentTo = card.querySelector('.f-lent').value.trim();
+  b.lentOn = card.querySelector('.f-lent-on').value;
+  if(!b.lentTo) b.lentOn = '';
+  b.category  = card.querySelector('.f-category').value;
+  saveLending();
+  renderCard(i); renderRail(); stats(); applyFilters();
+}
+
+/* ---------- detail sheet ---------- */
+const backdrop = document.getElementById('backdrop');
+const sheet = document.getElementById('sheet');
+const sheetBody = document.getElementById('sheet-body');
+let lastFocus = null;
+
+function srow(label, value){
+  if(!value || value === '—') return '';
+  return `<div class="s-row"><div class="s-label">${label}</div><div class="s-value">${value}</div></div>`;
+}
+
+function openDetail(i){
+  const b = books[i];
+  lastFocus = document.activeElement;
+  sheet.style.setProperty('--accent', accentOf(b));
+  sheetBody.innerHTML = `
+    <div class="s-cat">${esc(b.category)} · No. ${String(i+1).padStart(2,'0')}</div>
+    <div class="s-title-bn">${esc(b.titleBn)}</div>
+    <div class="s-title-en">${esc(b.titleEn)}</div>
+    ${srow('লেখক · Author', `<span class="big-bn">${esc(b.authorBn)}</span><span class="small-en">${esc(b.authorEn)}</span>`)}
+    ${srow('প্রকাশক · Publisher', esc(b.publisher))}
+    ${b.lentTo ? srow('ধার · Lent to', `<span class="s-lent">${esc(b.lentTo)}</span>${b.lentOn ? ' — since ' + esc(b.lentOn) : ''}`) : ''}
+    ${b.blurb ? srow('পরিচিতি · About', `<div class="s-about">${esc(b.blurb)}</div>`) : ''}
+    <div class="s-actions"><button class="s-edit" id="s-edit">✎ Edit this book</button></div>`;
+  document.getElementById('s-edit').addEventListener('click', () => {
+    closeDetail(); enterEdit(i);
+    document.getElementById('card-'+i).scrollIntoView({behavior:'smooth',block:'center'});
+  });
+  backdrop.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('sheet-close').focus();
+}
+function closeDetail(){
+  backdrop.classList.remove('open');
+  document.body.style.overflow = '';
+  if(lastFocus) lastFocus.focus();
+}
+document.getElementById('sheet-close').addEventListener('click', closeDetail);
+backdrop.addEventListener('click', e => { if(e.target === backdrop) closeDetail(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape' && backdrop.classList.contains('open')) closeDetail(); });
+
+/* ---------- lending ---------- */
+function toggleLend(i){
+  const b = books[i];
+  if(b.lentTo){
+    b.lentTo = ''; b.lentOn = '';
+  } else {
+    const who = prompt('Who has this book?\n\n' + b.titleBn);
+    if(who === null) return;
+    const name = who.trim();
+    if(!name) return;
+    b.lentTo = name;
+    b.lentOn = new Date().toISOString().slice(0,10);
+  }
+  saveLending();
+  renderCard(i); stats(); applyFilters();
+}
+
+function saveLending(){
+  try{
+    const out = {};
+    books.forEach((b,i) => { if(b.lentTo) out[i] = {to:b.lentTo, on:b.lentOn||''}; });
+    localStorage.setItem('boighor-lending', JSON.stringify(out));
+  }catch(e){}
+}
+function loadLending(){
+  try{
+    const raw = localStorage.getItem('boighor-lending');
+    if(!raw) return;
+    const data = JSON.parse(raw);
+    Object.keys(data).forEach(k => {
+      const i = Number(k);
+      if(books[i]){ books[i].lentTo = data[k].to; books[i].lentOn = data[k].on; }
+    });
+  }catch(e){}
+}
+
+/* ---------- filters ---------- */
+let activeCat = 'all', term = '';
+function applyFilters(){
+  let n = 0;
+  document.querySelectorAll('.card').forEach(card => {
+    const ok = (activeCat === 'all'
+                 || (activeCat === '__lent' ? card.dataset.lent === '1'
+                                            : card.dataset.category === activeCat))
+            && card.dataset.search.includes(term);
+    card.style.display = ok ? '' : 'none';
+    if(ok) n++;
+  });
+  document.getElementById('no-results').style.display = n ? 'none' : 'block';
+}
+document.querySelectorAll('.pill').forEach(p => {
+  p.addEventListener('click', () => {
+    document.querySelectorAll('.pill').forEach(x => x.classList.remove('active'));
+    p.classList.add('active');
+    activeCat = p.dataset.filter;
+    applyFilters();
+  });
+});
+document.getElementById('search').addEventListener('input', e => {
+  term = e.target.value.toLowerCase().trim();
+  applyFilters();
+});
+
+/* ---------- stats ---------- */
+function stats(){
+  document.getElementById('stat-total').textContent = books.length;
+  const a = new Set(books.map(b => b.authorEn).filter(x => x && x !== '—' && !x.startsWith('(')));
+  document.getElementById('stat-authors').textContent = a.size;
+  const c = new Set(books.map(b => b.category));
+  document.getElementById('stat-cats').textContent = c.size;
+  document.getElementById('stat-lent').textContent = books.filter(b => b.lentTo).length;
+  document.getElementById('footer-count').textContent = books.length + ' volumes';
+}
+
+/* ---------- init ---------- */
+loadLending();
+renderRail();
+books.forEach((b,i) => renderCard(i));
+stats();
+</script>
+</body>
+</html>
