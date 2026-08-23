@@ -590,19 +590,8 @@
   }
   #addbox .sub{
     font-family:'Jost',sans-serif; font-size:0.68rem; letter-spacing:0.14em;
-    text-transform:uppercase; color:var(--ink-soft); margin-bottom:1.3rem;
+    text-transform:uppercase; color:var(--ink-soft); margin-bottom:1.4rem;
   }
-  .add-tabs{ display:flex; gap:0.4rem; margin-bottom:1.3rem; }
-  .add-tabs button{
-    flex:1; padding:0.6rem; cursor:pointer; border-radius:11px;
-    font-family:'Jost',sans-serif; font-size:0.68rem; letter-spacing:0.12em;
-    text-transform:uppercase; border:1px solid var(--line);
-    background:transparent; color:var(--ink-soft);
-  }
-  .add-tabs button.active{ background:var(--plum); color:#fff; border-color:var(--plum); }
-  .add-pane{ display:none; }
-  .add-pane.active{ display:block; }
-
   #addbox label{
     display:block; font-family:'Jost',sans-serif; font-size:0.62rem;
     letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-soft);
@@ -630,21 +619,6 @@
   .add-actions button:disabled{ opacity:0.5; cursor:not-allowed; }
   #add-err{ color:#B4495F; font-size:0.76rem; min-height:1.1em;
             font-family:'Jost',sans-serif; margin-top:0.7rem; }
-
-  /* image pane */
-  #drop{
-    border:1.5px dashed var(--line); border-radius:14px;
-    padding:2rem 1rem; text-align:center; cursor:pointer;
-    background:var(--paper-2); transition:border-color .18s, background .18s;
-  }
-  #drop:hover, #drop.over{ border-color:var(--plum); background:var(--paper); }
-  #drop .big{ font-family:'Tiro Bangla',serif; font-size:1.1rem; color:var(--ink-2); }
-  #drop .small{ font-family:'Jost',sans-serif; font-size:0.64rem;
-                letter-spacing:0.12em; text-transform:uppercase;
-                color:var(--ink-soft); margin-top:0.5rem; }
-  #preview{ display:none; margin-top:1rem; text-align:center; }
-  #preview img{ max-width:100%; max-height:230px; border-radius:12px;
-                box-shadow:0 8px 24px rgba(43,33,41,0.18); }
 </style>
 </head>
 <body>
@@ -674,47 +648,27 @@
     <h3>নতুন বই · Add a book</h3>
     <div class="sub">added to the end of the shelf</div>
 
-    <div class="add-tabs">
-      <button id="tab-manual" class="active">Type it in</button>
-      <button id="tab-image">From a photo</button>
-    </div>
+    <label>বাংলা শিরোনাম · Bengali title <span class="translit-hint">phonetic</span></label>
+    <input class="bn-input" id="a-title-bn" placeholder="type &quot;byomkesh&quot; → ব্যোমকেশ">
+    <label>English title</label>
+    <input id="a-title-en" placeholder="Byomkesh Samagra">
+    <label>বাংলা লেখক · Bengali author <span class="translit-hint">phonetic</span></label>
+    <input class="bn-input" id="a-author-bn">
+    <label>English author</label>
+    <input id="a-author-en">
+    <label>Publisher</label>
+    <input id="a-publisher" placeholder="—">
+    <label>পরিচিতি · About</label>
+    <textarea id="a-blurb" placeholder="a line or two about the book"></textarea>
+    <label>Shelf</label>
+    <select id="a-category"></select>
+    <label>ধার নিয়েছেন · Lent to <span class="translit-hint">blank = on the shelf</span></label>
+    <input id="a-lent" placeholder="borrower's name">
 
-    <div id="pane-image" class="add-pane">
-      <div id="drop">
-        <div class="big">📷 Tap to choose a photo</div>
-        <div class="small">cover or spine · or drag one here</div>
-      </div>
-      <input type="file" id="file-input" accept="image/*" style="display:none">
-      <div id="preview"><img id="preview-img" alt="selected cover"></div>
-      <div class="add-actions">
-        <button id="scan-go" class="primary" disabled>Read the cover</button>
-      </div>
-      <div id="scan-note" style="font-family:'Jost',sans-serif;font-size:0.66rem;letter-spacing:0.1em;color:var(--ink-soft);margin-top:0.8rem;text-align:center;"></div>
-    </div>
-
-    <div id="pane-manual" class="add-pane active">
-      <label>বাংলা শিরোনাম · Bengali title <span class="translit-hint">phonetic</span></label>
-      <input class="bn-input" id="a-title-bn" placeholder="type &quot;byomkesh&quot; → ব্যোমকেশ">
-      <label>English title</label>
-      <input id="a-title-en" placeholder="Byomkesh Samagra">
-      <label>বাংলা লেখক · Bengali author <span class="translit-hint">phonetic</span></label>
-      <input class="bn-input" id="a-author-bn">
-      <label>English author</label>
-      <input id="a-author-en">
-      <label>Publisher</label>
-      <input id="a-publisher" placeholder="—">
-      <label>পরিচিতি · About</label>
-      <textarea id="a-blurb" placeholder="a line or two about the book"></textarea>
-      <label>Shelf</label>
-      <select id="a-category"></select>
-      <label>ধার নিয়েছেন · Lent to <span class="translit-hint">blank = on the shelf</span></label>
-      <input id="a-lent" placeholder="borrower's name">
-
-      <div id="add-err"></div>
-      <div class="add-actions">
-        <button id="add-cancel">Cancel</button>
-        <button id="add-save" class="primary">Add to shelf</button>
-      </div>
+    <div id="add-err"></div>
+    <div class="add-actions">
+      <button id="add-cancel">Cancel</button>
+      <button id="add-save" class="primary">Add to shelf</button>
     </div>
   </div>
 </div>
@@ -1246,7 +1200,12 @@ function toggleLend(i){
 
 const SUPA_URL = 'https://sbopbrvjugdzyulnloil.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNib3BicnZqdWdkenl1bG5sb2lsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0ODc2NTcsImV4cCI6MjEwMzA2MzY1N30.U_gcaAFCZQGrftRD4Wfe1_2qBaiXPbDxN9PJ0FaplPA';
-const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+let sb = null;
+try{
+  sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+}catch(e){
+  console.error('Supabase client failed to start', e);
+}
 
 const statusEl = () => document.getElementById('auth-status');
 let signedIn = false;
@@ -1270,6 +1229,7 @@ function serialise(){
 }
 
 async function saveLending(){
+  if(!sb){ flash('<b>not connected</b> — reload the page'); return; }
   if(!signedIn){ flash('<b>not signed in</b> — change not saved'); return; }
   try{
     const { error } = await sb.from('shelf')
@@ -1283,6 +1243,7 @@ async function saveLending(){
 }
 
 async function loadLending(){
+  if(!sb) return false;
   try{
     const { data, error } = await sb.from('shelf').select('data').eq('id', 1).maybeSingle();
     if(error) throw error;
@@ -1314,17 +1275,15 @@ function setSignedIn(on, email){
 
 const loginbox = () => document.getElementById('loginbox');
 
-async function initAuth(){
-  const { data } = await sb.auth.getSession();
-  setSignedIn(!!data.session, data.session?.user?.email);
-
+function initAuth(){
+  /* listeners first — nothing here may depend on the network */
   document.getElementById('auth-btn').addEventListener('click', async () => {
     if(signedIn){
-      await sb.auth.signOut();
+      try{ await sb.auth.signOut(); }catch(e){ console.error(e); }
       setSignedIn(false);
       redrawAll();
     } else {
-      document.getElementById('login-err').textContent = '';
+      document.getElementById('login-err').textContent = sb ? '' : 'connection to the server failed — reload the page';
       loginbox().classList.add('open');
       document.getElementById('li-email').focus();
     }
@@ -1332,15 +1291,31 @@ async function initAuth(){
 
   document.getElementById('li-cancel').addEventListener('click', () => loginbox().classList.remove('open'));
   loginbox().addEventListener('click', e => { if(e.target === loginbox()) loginbox().classList.remove('open'); });
-
   document.getElementById('li-go').addEventListener('click', doLogin);
   document.getElementById('li-pass').addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape' && loginbox().classList.contains('open')) loginbox().classList.remove('open');
+  });
+}
+
+/* restore a previous session, if any — safe to fail */
+async function restoreSession(){
+  if(!sb) return;
+  try{
+    const { data } = await sb.auth.getSession();
+    setSignedIn(!!data.session, data.session?.user?.email);
+  }catch(e){
+    console.error('session check failed', e);
+    setSignedIn(false);
+  }
 }
 
 async function doLogin(){
   const email = document.getElementById('li-email').value.trim();
   const pass  = document.getElementById('li-pass').value;
   const err   = document.getElementById('login-err');
+  if(!sb){ err.textContent = 'not connected to the server — reload the page'; return; }
+  if(!email || !pass){ err.textContent = 'email and password, please'; return; }
   err.textContent = 'checking…';
   const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
   if(error){ err.textContent = error.message; return; }
@@ -1400,18 +1375,20 @@ books.forEach((b,i) => renderCard(i));
 stats();
 
 (async () => {
-  initAdd();
-  await initAuth();
-  const ok = await loadLending();
-  if(ok) redrawAll();
+  try{ initAuth(); }catch(e){ console.error('auth setup failed', e); }
+  try{ initAdd(); }catch(e){ console.error('add setup failed', e); }
+  await restoreSession();
+  try{
+    const ok = await loadLending();
+    if(ok) redrawAll();
+  }catch(e){ console.error('initial load failed', e); }
 })();
 
 /* ---------- PWA ---------- */
 if('serviceWorker' in navigator){
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').catch(e => {
-      // iOS in-app browsers / non-Safari iOS browsers block this. Harmless — the
-      // site works fine, only offline caching and install are unavailable there.
+      // iOS in-app browsers block this. Harmless — only offline caching is affected.
       console.info('offline mode unavailable here:', e.message || e);
     });
   });
@@ -1441,16 +1418,11 @@ window.addEventListener('appinstalled', () => {
 
 /* ---------- add a book ---------- */
 const addbox = () => document.getElementById('addbox');
+const AF = ['a-title-bn','a-title-en','a-author-bn','a-author-en','a-publisher','a-blurb','a-lent'];
 
 function openAdd(){
   document.getElementById('add-err').textContent = '';
-  ['a-title-bn','a-title-en','a-author-bn','a-author-en','a-publisher','a-blurb','a-lent']
-    .forEach(id => document.getElementById(id).value = '');
-  document.getElementById('preview').style.display = 'none';
-  document.getElementById('scan-go').disabled = true;
-  document.getElementById('scan-note').textContent = '';
-  pickedImage = null;
-  showPane('manual');
+  AF.forEach(id => document.getElementById(id).value = '');
   addbox().classList.add('open');
   document.body.style.overflow = 'hidden';
   document.getElementById('a-title-bn').focus();
@@ -1461,35 +1433,21 @@ function closeAdd(){
   document.body.style.overflow = '';
 }
 
-function showPane(which){
-  document.getElementById('pane-manual').classList.toggle('active', which === 'manual');
-  document.getElementById('pane-image').classList.toggle('active', which === 'image');
-  document.getElementById('tab-manual').classList.toggle('active', which === 'manual');
-  document.getElementById('tab-image').classList.toggle('active', which === 'image');
-}
-
 function initAdd(){
-  // categories
-  const sel = document.getElementById('a-category');
-  sel.innerHTML = CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
+  document.getElementById('a-category').innerHTML =
+    CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
 
-  // phonetic on the Bengali fields
   attachPhonetic(document.getElementById('a-title-bn'));
   attachPhonetic(document.getElementById('a-author-bn'));
 
   document.getElementById('add-btn').addEventListener('click', openAdd);
   document.getElementById('add-cancel').addEventListener('click', closeAdd);
+  document.getElementById('add-save').addEventListener('click', addBook);
+
   addbox().addEventListener('click', e => { if(e.target === addbox()) closeAdd(); });
   document.addEventListener('keydown', e => {
     if(e.key === 'Escape' && addbox().classList.contains('open')) closeAdd();
   });
-
-  document.getElementById('tab-manual').addEventListener('click', () => showPane('manual'));
-  document.getElementById('tab-image').addEventListener('click', () => showPane('image'));
-
-  document.getElementById('add-save').addEventListener('click', addBook);
-
-  initImagePick();
 }
 
 async function addBook(){
@@ -1508,7 +1466,7 @@ async function addBook(){
   }
 
   const lentTo = v('a-lent');
-  const book = {
+  books.push({
     titleBn:   titleBn || titleEn,
     titleEn:   titleEn || titleBn,
     authorBn:  transliterateText(v('a-author-bn')),
@@ -1518,9 +1476,8 @@ async function addBook(){
     category:  document.getElementById('a-category').value,
     lentTo:    lentTo,
     lentOn:    lentTo ? new Date().toISOString().slice(0,10) : ''
-  };
+  });
 
-  books.push(book);
   const i = books.length - 1;
   renderCard(i);
   renderRail(); stats(); applyFilters();
@@ -1528,113 +1485,6 @@ async function addBook(){
   await saveLending();
   const card = document.getElementById('card-'+i);
   if(card) card.scrollIntoView({behavior:'smooth', block:'center'});
-}
-
-/* ---------- add from a photo ---------- */
-let pickedImage = null;   // { base64, mediaType }
-
-function initImagePick(){
-  const drop = document.getElementById('drop');
-  const input = document.getElementById('file-input');
-
-  drop.addEventListener('click', () => input.click());
-  input.addEventListener('change', () => { if(input.files[0]) handleImage(input.files[0]); });
-
-  ['dragenter','dragover'].forEach(ev =>
-    drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
-  ['dragleave','drop'].forEach(ev =>
-    drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
-  drop.addEventListener('drop', e => {
-    const f = e.dataTransfer.files[0];
-    if(f && f.type.startsWith('image/')) handleImage(f);
-  });
-
-  document.getElementById('scan-go').addEventListener('click', scanImage);
-}
-
-/* downscale so we never ship a 12MP phone photo over the wire */
-function handleImage(file){
-  const note = document.getElementById('scan-note');
-  note.textContent = 'preparing…';
-  const reader = new FileReader();
-  reader.onload = () => {
-    const img = new Image();
-    img.onload = () => {
-      const MAX = 1400;
-      let { width:w, height:h } = img;
-      if(w > MAX || h > MAX){
-        const r = Math.min(MAX/w, MAX/h);
-        w = Math.round(w*r); h = Math.round(h*r);
-      }
-      const c = document.createElement('canvas');
-      c.width = w; c.height = h;
-      c.getContext('2d').drawImage(img, 0, 0, w, h);
-      const dataUrl = c.toDataURL('image/jpeg', 0.85);
-      pickedImage = { base64: dataUrl.split(',')[1], mediaType: 'image/jpeg' };
-
-      document.getElementById('preview-img').src = dataUrl;
-      document.getElementById('preview').style.display = 'block';
-      document.getElementById('scan-go').disabled = false;
-      note.textContent = '';
-    };
-    img.onerror = () => { note.textContent = "couldn't read that image"; };
-    img.src = reader.result;
-  };
-  reader.onerror = () => { note.textContent = "couldn't read that file"; };
-  reader.readAsDataURL(file);
-}
-
-async function scanImage(){
-  const note = document.getElementById('scan-note');
-  const btn  = document.getElementById('scan-go');
-  if(!pickedImage) return;
-  if(!signedIn){ note.textContent = 'sign in first'; return; }
-
-  btn.disabled = true;
-  note.textContent = 'reading the cover…';
-
-  try{
-    const { data: sess } = await sb.auth.getSession();
-    const res = await fetch(SUPA_URL + '/functions/v1/read-cover', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + (sess.session?.access_token || SUPA_KEY),
-        'apikey': SUPA_KEY
-      },
-      body: JSON.stringify({ image: pickedImage.base64, mediaType: pickedImage.mediaType })
-    });
-
-    if(!res.ok){
-      const t = await res.text();
-      throw new Error(res.status === 404
-        ? 'the read-cover function is not deployed yet'
-        : (t || ('HTTP ' + res.status)));
-    }
-
-    const b = await res.json();
-    if(b.error) throw new Error(b.error);
-
-    // drop the results into the manual form so you can correct them
-    const put = (id, val) => { if(val) document.getElementById(id).value = val; };
-    put('a-title-bn',  b.titleBn);
-    put('a-title-en',  b.titleEn);
-    put('a-author-bn', b.authorBn);
-    put('a-author-en', b.authorEn);
-    put('a-publisher', b.publisher);
-    put('a-blurb',     b.blurb);
-    if(b.category && CATEGORIES.includes(b.category)){
-      document.getElementById('a-category').value = b.category;
-    }
-
-    showPane('manual');
-    document.getElementById('add-err').textContent = 'Read from the photo — check it over, then add.';
-  }catch(e){
-    console.error(e);
-    note.textContent = 'could not read it — ' + (e.message || 'try again');
-  }finally{
-    btn.disabled = false;
-  }
 }
 </script>
 </body>
