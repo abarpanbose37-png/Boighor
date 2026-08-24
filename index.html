@@ -567,8 +567,8 @@
   #login-err{ color:#B4495F; font-size:0.75rem; min-height:1.1em; font-family:'Jost',sans-serif; }
 
   /* ============ ADD BOOK ============ */
-  #add-btn{ display:none; }
-  body.signed-in #add-btn{ display:inline-block; }
+  #add-btn, #import-btn{ display:none; }
+  body.signed-in #add-btn, body.signed-in #import-btn{ display:inline-block; }
   #authbar #add-btn{ background:var(--plum); color:#fff; border-color:var(--plum); }
   #authbar #add-btn:hover{ filter:brightness(1.12); }
 
@@ -697,6 +697,53 @@
     font-family:'Hind Siliguri',sans-serif; font-size:0.82rem; color:var(--ink-2);
   }
   #dup-warn b{ color:var(--ink); }
+
+  /* ============ EXPORT / IMPORT ============ */
+  #importbox{
+    position:fixed; inset:0; z-index:78; display:none;
+    align-items:center; justify-content:center;
+    background:rgba(43,33,41,0.46); backdrop-filter:blur(5px);
+    overflow-y:auto; padding:4vh 4vw;
+  }
+  #importbox.open{ display:flex; }
+  #importbox .panel{
+    background:var(--card); border-radius:20px; padding:1.9rem 1.7rem 1.6rem;
+    width:min(520px,94vw); box-shadow:0 34px 80px rgba(43,33,41,0.3); margin:auto;
+  }
+  #importbox h3{ margin:0 0 0.3rem; font-family:'Tiro Bangla',serif;
+                 font-weight:400; font-size:1.6rem; color:var(--ink); }
+  #importbox .sub{ font-family:'Jost',sans-serif; font-size:0.68rem;
+                   letter-spacing:0.14em; text-transform:uppercase;
+                   color:var(--ink-soft); margin-bottom:1.4rem; }
+  #imp-drop{
+    border:1.5px dashed var(--line); border-radius:14px;
+    padding:2rem 1rem; text-align:center; cursor:pointer;
+    background:var(--paper-2); transition:border-color .18s, background .18s;
+  }
+  #imp-drop:hover, #imp-drop.over{ border-color:var(--plum); background:var(--paper); }
+  #imp-drop .big{ font-family:'Tiro Bangla',serif; font-size:1.05rem; color:var(--ink-2); }
+  #imp-drop .small{ font-family:'Jost',sans-serif; font-size:0.62rem;
+                    letter-spacing:0.12em; text-transform:uppercase;
+                    color:var(--ink-soft); margin-top:0.5rem; }
+  .imp-mode{ margin-top:1.2rem; }
+  .imp-mode label{
+    display:flex; align-items:flex-start; gap:0.6rem; cursor:pointer;
+    padding:0.7rem 0.8rem; border:1px solid var(--line); border-radius:11px;
+    margin-bottom:0.55rem; background:var(--paper-2);
+  }
+  .imp-mode label:has(input:checked){ border-color:var(--plum); background:var(--paper); }
+  .imp-mode input{ width:auto; margin-top:0.2rem; accent-color:var(--plum); }
+  .imp-mode .t{ font-family:'Jost',sans-serif; font-size:0.72rem;
+                letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-2); }
+  .imp-mode .d{ font-family:'Hind Siliguri',sans-serif; font-size:0.8rem;
+                color:var(--ink-soft); margin-top:0.15rem; }
+  #imp-summary{
+    display:none; margin-top:1.1rem; padding:0.85rem 0.95rem; border-radius:11px;
+    background:rgba(139,158,140,0.14); border:1px solid rgba(139,158,140,0.42);
+    font-family:'Hind Siliguri',sans-serif; font-size:0.84rem; color:var(--ink-2);
+  }
+  #imp-err{ color:#B4495F; font-size:0.78rem; min-height:1.1em;
+            font-family:'Jost',sans-serif; margin-top:0.7rem; }
 </style>
 </head>
 <body>
@@ -705,6 +752,8 @@
   <span class="dot"></span>
   <span class="status" id="auth-status">read-only · viewing</span>
   <button id="add-btn">+ Add book</button>
+  <button id="export-btn">Export</button>
+  <button id="import-btn">Import</button>
   <button id="install-btn" style="display:none">Install</button>
   <button id="auth-btn">Sign in</button>
 </div>
@@ -721,6 +770,37 @@
   </div>
 </div>
 
+
+<div id="importbox">
+  <div class="panel">
+    <h3>এক্সেল · Import from Excel</h3>
+    <div class="sub">.xlsx or .csv — same columns as the export</div>
+
+    <div id="imp-drop">
+      <div class="big">📄 Tap to choose a file</div>
+      <div class="small">or drag one here</div>
+    </div>
+    <input type="file" id="imp-file" accept=".xlsx,.xls,.csv" style="display:none">
+
+    <div class="imp-mode">
+      <label>
+        <input type="radio" name="impmode" value="merge" checked>
+        <span><span class="t">Merge</span><span class="d">Add new books, update ones already on the shelf. Nothing is removed.</span></span>
+      </label>
+      <label>
+        <input type="radio" name="impmode" value="replace">
+        <span><span class="t">Replace everything</span><span class="d">Wipe the shelf and use only what's in the file.</span></span>
+      </label>
+    </div>
+
+    <div id="imp-summary"></div>
+    <div id="imp-err"></div>
+    <div class="add-actions">
+      <button id="imp-cancel">Cancel</button>
+      <button id="imp-go" class="primary" disabled>Import</button>
+    </div>
+  </div>
+</div>
 <div id="addbox">
   <div class="panel">
     <h3>নতুন বই · Add a book</h3>
@@ -831,6 +911,7 @@
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
 const books = [
   {titleBn:"ব্যোমকেশ সমগ্র", titleEn:"Byomkesh Samagra", authorBn:"শরদিন্দু বন্দ্যোপাধ্যায়", authorEn:"Sharadindu Bandyopadhyay", publisher:"Ananda Publishers", category:"Detective", accent:"#3b3530", blurb:"The complete Byomkesh Bakshi stories. Sharadindu's 'satyanweshi' (truth-seeker) — never a detective, he insists — solves crimes in colonial and post-independence Bengal through pure deduction."},
@@ -1687,6 +1768,7 @@ applyFilters();
 (async () => {
   try{ initAuth(); }catch(e){ console.error('auth setup failed', e); }
   try{ initAdd(); }catch(e){ console.error('add setup failed', e); }
+  try{ initExcel(); }catch(e){ console.error('excel setup failed', e); }
   await restoreSession();
   try{
     const ok = await loadLending();
@@ -1830,6 +1912,196 @@ async function addBook(){
   await saveLending();
   const card = document.getElementById('card-'+i);
   if(card) card.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+/* ---------- Excel export / import ---------- */
+const XL_COLS = [
+  ['titleBn',   'Bengali Title'],
+  ['titleEn',   'English Title'],
+  ['authorBn',  'Bengali Author'],
+  ['authorEn',  'English Author'],
+  ['publisher', 'Publisher'],
+  ['category',  'Shelf'],
+  ['status',    'Reading Status'],
+  ['blurb',     'About'],
+  ['lentTo',    'Lent To'],
+  ['lentOn',    'Lent On'],
+  ['addedOn',   'Added On']
+];
+
+function exportExcel(){
+  if(typeof XLSX === 'undefined'){ flash('<b>export unavailable</b> — reload the page'); return; }
+  try{
+    const rows = books.map(b => {
+      const o = {};
+      XL_COLS.forEach(([k, hdr]) => { o[hdr] = b[k] || ''; });
+      return o;
+    });
+
+    const ws = XLSX.utils.json_to_sheet(rows, { header: XL_COLS.map(c => c[1]) });
+    ws['!cols'] = [
+      {wch:30},{wch:30},{wch:20},{wch:20},{wch:18},
+      {wch:13},{wch:14},{wch:52},{wch:16},{wch:12},{wch:12}
+    ];
+    ws['!freeze'] = { xSplit: 0, ySplit: 1 };
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Boighor');
+    const stamp = new Date().toISOString().slice(0,10);
+    XLSX.writeFile(wb, `boighor-${stamp}.xlsx`);
+    flash('<b>exported</b> ' + books.length + ' books');
+  }catch(e){
+    console.error(e);
+    flash('<b>export failed</b> — ' + (e.message || 'try again'));
+  }
+}
+
+/* ---------- import ---------- */
+let pendingRows = null;
+const importbox = () => document.getElementById('importbox');
+
+function openImport(){
+  pendingRows = null;
+  document.getElementById('imp-err').textContent = '';
+  document.getElementById('imp-summary').style.display = 'none';
+  document.getElementById('imp-go').disabled = true;
+  document.querySelector('input[name="impmode"][value="merge"]').checked = true;
+  importbox().classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeImport(){
+  importbox().classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* accept either the pretty headers or the raw field names */
+function rowToBook(row){
+  const lookup = {};
+  Object.keys(row).forEach(k => { lookup[String(k).trim().toLowerCase()] = row[k]; });
+
+  const get = (key, header) => {
+    const v = lookup[header.toLowerCase()] ?? lookup[key.toLowerCase()];
+    return v === undefined || v === null ? '' : String(v).trim();
+  };
+
+  const b = {};
+  XL_COLS.forEach(([k, hdr]) => { b[k] = get(k, hdr); });
+
+  if(!b.titleBn && !b.titleEn) return null;
+  if(!b.titleBn) b.titleBn = b.titleEn;
+  if(!b.titleEn) b.titleEn = b.titleBn;
+  if(!b.publisher) b.publisher = '—';
+  if(!CATEGORIES.includes(b.category)) b.category = 'Literature';
+
+  const st = b.status.toLowerCase();
+  b.status = ['unread','reading','read'].includes(st) ? st : '';
+  if(!b.lentTo) b.lentOn = '';
+  return b;
+}
+
+function readImportFile(file){
+  const err = document.getElementById('imp-err');
+  const sum = document.getElementById('imp-summary');
+  err.textContent = 'reading…';
+
+  if(typeof XLSX === 'undefined'){ err.textContent = 'spreadsheet library did not load — reload the page'; return; }
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    try{
+      const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      if(!ws) throw new Error('that file has no sheets in it');
+
+      const raw = XLSX.utils.sheet_to_json(ws, { defval: '' });
+      const parsed = raw.map(rowToBook).filter(Boolean);
+      if(!parsed.length) throw new Error('no rows with a title — check the column headers');
+
+      pendingRows = parsed;
+      const skipped = raw.length - parsed.length;
+      sum.innerHTML = '<b>' + parsed.length + '</b> book' + (parsed.length===1?'':'s') +
+                      ' read from the file' +
+                      (skipped ? ' · ' + skipped + ' row' + (skipped===1?'':'s') + ' skipped (no title)' : '') +
+                      '.';
+      sum.style.display = 'block';
+      err.textContent = '';
+      document.getElementById('imp-go').disabled = false;
+    }catch(ex){
+      console.error(ex);
+      pendingRows = null;
+      sum.style.display = 'none';
+      document.getElementById('imp-go').disabled = true;
+      err.textContent = ex.message || 'could not read that file';
+    }
+  };
+  reader.onerror = () => { err.textContent = "couldn't open that file"; };
+  reader.readAsArrayBuffer(file);
+}
+
+async function runImport(){
+  const err = document.getElementById('imp-err');
+  if(!pendingRows) return;
+  if(!signedIn){ err.textContent = 'sign in first'; return; }
+
+  const mode = document.querySelector('input[name="impmode"]:checked').value;
+  const btn = document.getElementById('imp-go');
+  btn.disabled = true;
+  err.textContent = 'importing…';
+
+  try{
+    let added = 0, updated = 0;
+
+    if(mode === 'replace'){
+      books.length = 0;
+      pendingRows.forEach(b => books.push(b));
+      added = pendingRows.length;
+    } else {
+      const norm = t => (t || '').toLowerCase().replace(/[^a-z0-9\u0980-\u09FF]/g, '');
+      pendingRows.forEach(row => {
+        const nEn = norm(row.titleEn), nBn = norm(row.titleBn);
+        const at = books.findIndex(b =>
+          (nEn && norm(b.titleEn) === nEn) || (nBn && norm(b.titleBn) === nBn));
+        if(at === -1){ books.push(row); added++; }
+        else { Object.assign(books[at], row); updated++; }
+      });
+    }
+
+    rebuildGrid();
+    await saveLending();
+    closeImport();
+    flash('<b>imported</b> · ' + added + ' added, ' + updated + ' updated');
+  }catch(e){
+    console.error(e);
+    err.textContent = e.message || 'import failed';
+    btn.disabled = false;
+  }
+}
+
+function initExcel(){
+  document.getElementById('export-btn').addEventListener('click', exportExcel);
+  document.getElementById('import-btn').addEventListener('click', openImport);
+  document.getElementById('imp-cancel').addEventListener('click', closeImport);
+  document.getElementById('imp-go').addEventListener('click', runImport);
+
+  importbox().addEventListener('click', e => { if(e.target === importbox()) closeImport(); });
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape' && importbox().classList.contains('open')) closeImport();
+  });
+
+  const drop = document.getElementById('imp-drop');
+  const input = document.getElementById('imp-file');
+  drop.addEventListener('click', () => input.click());
+  input.addEventListener('change', () => { if(input.files[0]) readImportFile(input.files[0]); });
+
+  ['dragenter','dragover'].forEach(ev =>
+    drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave','drop'].forEach(ev =>
+    drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', e => {
+    const f = e.dataTransfer.files[0];
+    if(f) readImportFile(f);
+  });
 }
 </script>
 </body>
