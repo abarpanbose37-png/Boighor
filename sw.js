@@ -1,5 +1,5 @@
 /* আমার বইঘর — service worker */
-const CACHE = 'boighor-v3';
+const CACHE = 'boighor-v4';
 const SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
